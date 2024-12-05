@@ -71,6 +71,12 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const fetchUsers = async () => {
+    storeError.resetMessages()
+    const response = await axios.get('users')
+    users.value = response.data.data
+}
+
   const logout = async () => {
     storeError.resetMessages()
     try {

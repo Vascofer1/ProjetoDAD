@@ -1,5 +1,8 @@
 import HomeComponent from '@/components/HomeComponent.vue'
 import LaravelTester from '@/components/LaravelTester.vue'
+import NewAdmin from '@/components/users/NewAdmin.vue'
+import NewUser from '@/components/users/NewUser.vue'
+import UserList from '@/components/users/UserList.vue'
 import WebSocketTester from '@/components/WebSocketTester.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -23,8 +26,13 @@ const router = createRouter({
           component: WebSocketTester
         }
       ]
-    }
+    }, 
+    {path: '/user', component: NewUser},
+    {path: '/admin', component: NewAdmin},
+    {path: '/users', name: 'users', component: UserList}
   ]
 })
+
+
 
 export default router

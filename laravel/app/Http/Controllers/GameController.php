@@ -9,7 +9,7 @@ class GameController extends Controller
     //
 }
 
-public function generateCards()
+function generateCards()
 {
     $cards = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
     $cards = array_merge($cards, $cards); // Duplicar para pares
