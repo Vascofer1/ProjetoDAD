@@ -8,6 +8,8 @@ import '@/assets/base.css'
 import App from './App.vue'
 import router from './router'
 
+import ErrorMessage from './components/common/ErrorMessage.vue'
+
 const app = createApp(App)
 
 app.use(router)
@@ -15,6 +17,8 @@ app.use(router)
 app.use(createPinia())
 const apiDomain = import.meta.env.VITE_API_DOMAIN
 const wsConnection = import.meta.env.VITE_WS_CONNECTION
+
+app.component('ErrorMessage', ErrorMessage)
 
 console.log('api domain', apiDomain)
 console.log('ws connection', wsConnection)

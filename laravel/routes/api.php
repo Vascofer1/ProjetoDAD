@@ -5,12 +5,16 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/users/lol', [AuthController::class , 'lol']);
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::post('/auth/refreshtoken', [AuthController::class, 'refreshToken']);
     Route::get('/users/me', [UserController::class , 'showMe']);
+    Route::put('/users/{user}', [UserController::class, 'update']);//->can('update', 'user'); 
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/users/{user}', [UserController::class, 'show']);
    });
 
 Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/users', [UserController::class, 'store']);
+

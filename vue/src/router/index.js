@@ -3,8 +3,12 @@ import LaravelTester from '@/components/LaravelTester.vue'
 import NewAdmin from '@/components/users/NewAdmin.vue'
 import NewUser from '@/components/users/NewUser.vue'
 import UserList from '@/components/users/UserList.vue'
+import LoginPage from '@/components/LoginPage.vue'
+import Profile from '@/components/users/Profile.vue'
 import WebSocketTester from '@/components/WebSocketTester.vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import Register from '@/components/users/Register.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,11 +30,44 @@ const router = createRouter({
           component: WebSocketTester
         }
       ]
-    }, 
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginPage
+    },
+    {
+      path: '/users/me',
+      name: 'profile',
+      component: Profile
+    },
+    {
+      path: '/users/register',
+      name: 'register',
+      component: Register
+    }
+    , 
     {path: '/user', component: NewUser},
     {path: '/admin', component: NewAdmin},
     {path: '/users', name: 'users', component: UserList}
   ]
+});
+
+let handlingFirstRoute = true
+
+router.beforeEach(async (to, from, next) => {
+  const storeAuth = useAuthStore()
+  if (handlingFirstRoute) {
+    handlingFirstRoute = false
+    await storeAuth.restoreToken()
+  }
+  // routes "profile" and "home" are only accessible when user is logged in 
+  if (((to.name == 'profile') /*|| (to.name == 'home')*/) && (!storeAuth.user)) {
+    next({ name: 'login' })
+    return
+  }
+  // all other routes are accessible to everyone, including anonymous users 
+  next()
 })
 
 
