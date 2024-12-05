@@ -21,17 +21,21 @@ class StoreUpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
+        // Obter o ID do usuário da rota, se disponível (apenas para updates)
+        $userId = $this->route('user') ? $this->route('user')->id : null;
+
         return [
             'name' => 'required|string|max:100',
-            'email' => 'required|email|unique:users,email,' . $this->user->id,
-            'nickname' => 'required|string|max:50|unique:users,nickname,' . $this->user->id,
-            'photoUrl' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'email' => 'required|email|unique:users,email,' . $userId,
+            'nickname' => 'required|string|max:50|unique:users,nickname,' . $userId,
+            'photo_url' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'password' => 'required|string|min:3|confirmed',
             /*
             
             
             
             'type' => $this->type === 'A' ? 'Administrator' : 'Player',
-            'password' => 'nullable|string|min:3|confirmed',*/
+            ,*/
         ];
     }
 }

@@ -60,7 +60,7 @@ const clickCancel = () => {
                 <ErrorMessage class="ps-[6.5rem]" :errorMessage="storeError.fieldMessage('nickname')"></ErrorMessage>
             </div>
 
-            <div class="flex flex-col">
+            <!-- <div class="flex flex-col">
                 <div class="flex space-x-1 align-middle">
                     <label for="input_photo_id" class="w-24 font-medium text-sm leading-10">Photo File Name</label>
                     <input type="text" id="input_photo_id" class="px-4 grow h-10 border-gray-300 border rounded-lg text-base"
@@ -68,10 +68,41 @@ const clickCancel = () => {
                 </div>
                 <div class="row">
                     <p class="col-md-5">
-                        <ImageComponent :folder="user.photoUrl"/>
+                        <img class="img-thumbnail" :src="user.photoFileName" alt="Avatar">
                     </p>
                 </div>                
                 <ErrorMessage class="ps-[6.5rem]" :errorMessage="storeError.fieldMessage('photoFileName')"></ErrorMessage>
+            </div>-->
+
+            <!-- Input para upload de imagem -->
+            <div class="flex flex-col">
+                <div class="flex space-x-1 align-middle">
+                    <label for="input_photo_id" class="w-24 font-medium text-sm leading-10">Photo</label>
+                    <input type="file" id="input_photo_id" class="px-4 grow h-10 border-gray-300 border rounded-lg text-base"
+                           @change="handleFileChange">     
+                </div>
+                
+                <!-- Pré-visualização da imagem -->
+                <div class="row mt-2" v-if="user.photoFileName">
+                    <p class="col-md-5">
+                        <img class="img-thumbnail" :src="user.photoFileName" alt="Avatar Preview" style="max-width: 150px;">
+                    </p>
+                </div>                
+                <ErrorMessage class="ps-[6.5rem]" :errorMessage="storeError.fieldMessage('photo_url')"></ErrorMessage>
+            </div>
+
+            <div class="flex flex-col">
+                <div class="flex space-x-1 align-middle">
+                    <label for="input_password_id" class="w-24 font-medium text-sm leading-10">Password</label>
+                    <input type="password" id="input_password_id" class="px-4 grow h-10 border-gray-300 border rounded-lg text-base"
+                            v-model="user.password">     
+                </div>                
+                <div class="flex space-x-1 align-middle">
+                    <label for="input_password_confirmation_id" class="w-24 font-medium text-sm leading-10">Confirm Password</label>
+                    <input type="password" id="input_password_confirmation_id" class="px-4 grow h-10 border-gray-300 border rounded-lg text-base"
+                      v-model="user.password_confirmation">     
+    </div>  
+                <ErrorMessage class="ps-[6.5rem]" :errorMessage="storeError.fieldMessage('password')"></ErrorMessage>
             </div>
 
             <div class="pt-4 flex space-x-4 justify-end">

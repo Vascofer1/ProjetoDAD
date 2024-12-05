@@ -65,5 +65,13 @@ const login = () => {
         Login
       </Button>
     </CardFooter>
+    <CardFooter class="flex justify-left px-6 pb-6">
+      <CardDescription>You dont have account?</CardDescription>
+      <RouterLink :to="{ name: 'register' }"
+            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-blue-600 font-semibold">
+            Register
+      </RouterLink>
+    </CardFooter>
   </Card>
 </template>
