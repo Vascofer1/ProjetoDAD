@@ -6,6 +6,7 @@ import WebSocketTester from '@/components/WebSocketTester.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import Register from '@/components/users/Register.vue'
+import RemoveUser from '@/components/users/RemoveUser.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,6 +43,11 @@ const router = createRouter({
       path: '/users/register',
       name: 'register',
       component: Register
+    },
+    {
+      path: '/users/remove',
+      name: 'remove account',
+      component: RemoveUser
     }
   ]
 });

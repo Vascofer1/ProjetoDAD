@@ -18,7 +18,7 @@ const logout = () => {
     'Logout confirmation?', 'Cancel', `Yes, I want to log out`,
     `Are you sure you want to log out? You can still access your account later with 
   your credentials.`)
-} 
+}
 </script>
 
 <template>
@@ -46,9 +46,9 @@ const logout = () => {
           <RouterLink v-show="storeAuth.user" :to="{ name: 'profile' }"
             class="flex justify-between text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             active-class="text-blue-600 font-semibold">
-              {{ storeAuth.userFirstLastName ? storeAuth.userFirstLastName : ' ' }}
-              <img v-if="storeAuth.user" class="w-14 h-14 rounded-full" :src="storeAuth.userPhotoUrl"
-                alt="Rounded avatar">
+            {{ storeAuth.userFirstLastName ? storeAuth.userFirstLastName : ' ' }}
+            <img v-if="storeAuth.user" class="w-14 h-14 rounded-full" :src="storeAuth.userPhotoUrl"
+              alt="Rounded avatar">
           </RouterLink>
           <RouterLink v-show="!storeAuth.user" :to="{ name: 'login' }"
             class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
@@ -59,6 +59,11 @@ const logout = () => {
               border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500">
             Logout
           </button>
+          <RouterLink v-show="storeAuth.user" :to="{ name: 'remove account' }"
+            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-blue-600 font-semibold">
+            Remove Account
+          </RouterLink>
         </nav>
       </div>
     </header>

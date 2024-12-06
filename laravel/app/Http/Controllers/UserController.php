@@ -47,4 +47,11 @@ class UserController extends Controller
 
       return new UserResource($user);
    }
+
+
+   public function destroy(User $user)
+    {
+        $user->delete();
+        return response()->json(null, 204);
+    }
 }
