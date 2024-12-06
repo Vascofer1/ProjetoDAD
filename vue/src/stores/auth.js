@@ -216,6 +216,27 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const deleteUser = async () => {
+    storeError.resetMessages()
+    try {
+        console.log(user)
+        const nickname = user.value.nickname
+        const id = user.value.id
+        await axios.delete('users/' + user.value.id)
+        const index = user.id
+        if (index > -1) {
+          users.value.splice(index, 1)
+        }
+        toast({
+          description: `user #${id} "${nickname}" was deleted!`,
+        })
+        return true
+    } catch (e) {
+        storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error deleting project!')
+        return false
+    }
+  }    
+
   return {
     user,
     userName,
@@ -229,6 +250,7 @@ export const useAuthStore = defineStore('auth', () => {
     logout,
     updateUser,
     getUser,
-    insertUser
+    insertUser,
+    deleteUser
   }
 })
