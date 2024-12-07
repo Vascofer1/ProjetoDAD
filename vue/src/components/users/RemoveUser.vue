@@ -21,7 +21,7 @@ userStore.getUser(user)
 
 const nickname = ref('')
 
-
+console.log(user)
 
 // Cancelar e voltar para a página anterior
 const cancel = () => {
@@ -34,7 +34,7 @@ const deleteConfirmed = async () => {
 
   if (nickname.value == user.value.nickname) {
         if (await userStore.deleteUser()) {
-            router.push({ name: 'home' }); // Redirecionar para a lista de usuários
+            router.push({ name: 'home' }); // Redirecionar para a pagina principal
         }
     }
     else{
@@ -44,8 +44,9 @@ const deleteConfirmed = async () => {
 
 // Função para remover o usuário logado
 const deleteUser = () => {
+    console.log(user)
   alertDialog.value.open(deleteConfirmed, 'Are you sure?', 'Cancel', `Yes, delete User #${userStore.userFirstLastName}`,
-    `This action cannot be undone. This will permanently delete the User #${user.id} "${userStore.userFirstLastName}" from our servers.`)
+    `This action cannot be undone. This will permanently delete the User #${user.value.id} "${userStore.userFirstLastName}" from our servers.`)
 }
 </script>
 
@@ -78,7 +79,7 @@ const deleteUser = () => {
                                             border border-transparent bg-red-700 text-white 
                                             hover:bg-red-800 focus:outline-none focus:bg-red-800"
             @click.prevent="deleteUser">
-            Save
+            Remove
         </button>
     </div>
 

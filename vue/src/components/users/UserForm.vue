@@ -12,12 +12,16 @@ const props = defineProps({
     title: {
         type: String,
         default: 'User'
+    },
+    type:{
+        type: String
     }
 })
 
 const emit = defineEmits(['save', 'cancel'])
 
 const clickSave = (user) => {
+    console.log(user)
     emit('save', user)
 }
 
@@ -93,15 +97,17 @@ const clickCancel = () => {
 
             <div class="flex flex-col">
                 <div class="flex space-x-1 align-middle">
-                    <label for="input_password_id" class="w-24 font-medium text-sm leading-10">Password</label>
+                    <label v-if="props.type == 'updateUser'" for="input_password_confirmation_id" class="w-24 font-medium text-sm leading-10">New Password</label>
+                    <label v-else for="input_password_confirmation_id" class="w-24 font-medium text-sm leading-10">Password</label>
                     <input type="password" id="input_password_id" class="px-4 grow h-10 border-gray-300 border rounded-lg text-base"
                             v-model="user.password">     
                 </div>                
                 <div class="flex space-x-1 align-middle">
-                    <label for="input_password_confirmation_id" class="w-24 font-medium text-sm leading-10">Confirm Password</label>
+                    <label v-if="props.type == 'updateUser'" for="input_password_confirmation_id" class="w-24 font-medium text-sm leading-10">Confirm New Password</label>
+                    <label v-else for="input_password_confirmation_id" class="w-24 font-medium text-sm leading-10">Confirm Password</label>
                     <input type="password" id="input_password_confirmation_id" class="px-4 grow h-10 border-gray-300 border rounded-lg text-base"
                       v-model="user.password_confirmation">     
-    </div>  
+                </div>  
                 <ErrorMessage class="ps-[6.5rem]" :errorMessage="storeError.fieldMessage('password')"></ErrorMessage>
             </div>
 
