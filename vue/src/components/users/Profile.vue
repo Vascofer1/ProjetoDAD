@@ -53,7 +53,8 @@ onMounted(() => {
     <UserForm 
         v-if="user" 
         :user="user" 
-        :title="`Update User # ${user.id}`" 
+        :title="`Update User # ${storeUser.userFirstLastName}`" 
+        :type="`updateUser`"
         @save="save" 
         @cancel="cancel" 
     />

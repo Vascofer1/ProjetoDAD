@@ -18,6 +18,8 @@ export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
   const token = ref('')
 
+  const router = useRouter()
+
   const userName = computed(() => {
     return user.value ? user.value.name : ''
   })
@@ -200,12 +202,12 @@ export const useAuthStore = defineStore('auth', () => {
       toast({
         description: `user #${response.data.data.id} "${response.data.data.name}" was created!`,
         action: h(ToastAction, {
-          altText: `Open new user`,
+          altText: `Login`,
           onclick: () => {
-            router.push({ name: 'profile' })
+            router.push({ name: 'login' })
           }
         }, {
-          default: () => `Open new user`,
+          default: () => `Login`,
         })
       })
       console.log(user, "ola")
