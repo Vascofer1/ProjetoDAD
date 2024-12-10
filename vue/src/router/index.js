@@ -7,6 +7,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import Register from '@/components/users/Register.vue'
 import RemoveUser from '@/components/users/RemoveUser.vue'
+import TransactionCreate from '@/components/transactions/TransactionCreate.vue'
+import Transactions from '@/components/transactions/Transactions.vue'
+import TransactionRead from '@/components/transactions/TransactionRead.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -48,6 +51,22 @@ const router = createRouter({
       path: '/users/remove',
       name: 'remove account',
       component: RemoveUser
+    },
+    {
+      path: '/transactions/create',
+      name: 'create transaction',
+      component: TransactionCreate
+    },
+    {
+      path: '/transactions/:id',
+      name: 'show transaction',
+      component: TransactionRead,
+      props: route => ({ id: parseInt(route.params.id) })
+    },
+    {
+      path: '/transactions',
+      name: 'transactions',
+      component: Transactions
     }
   ]
 });
@@ -60,8 +79,8 @@ router.beforeEach(async (to, from, next) => {
     handlingFirstRoute = false
     await storeAuth.restoreToken()
   }
-  // routes "profile" and "home" are only accessible when user is logged in 
-  if (((to.name == 'profile') /*|| (to.name == 'home')*/) && (!storeAuth.user)) {
+  // routes "profile" and "RemoveUser" are only accessible when user is logged in 
+  if (((to.name == 'profile') || (to.name == 'RemoveUser') || (to.name == 'create transaction') || (to.name == 'transactions')) && (!storeAuth.user)) {
     next({ name: 'login' })
     return
   }

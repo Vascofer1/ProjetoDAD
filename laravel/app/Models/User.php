@@ -22,8 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'nickname',
-        'password',
         'photo_url',
+        'brain_coins_balance',
     ];
 
     /**
