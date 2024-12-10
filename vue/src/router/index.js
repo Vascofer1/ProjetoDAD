@@ -9,6 +9,7 @@ import Register from '@/components/users/Register.vue'
 import RemoveUser from '@/components/users/RemoveUser.vue'
 import MultiPlayerHistory from '@/components/historico/MultiPlayerHistory.vue'
 import SinglePlayerHistory from '@/components/historico/SinglePlayerHistory.vue'
+import LeaderboardGlobal from '@/components/leaderboards/LeaderboardGlobal.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -61,6 +62,11 @@ const router = createRouter({
       path: '/historico/multiplayer',
       name: 'MultiplayerHistory',
       component: MultiPlayerHistory
+    },
+    {
+      path: '/leaderboard',
+      name: 'leaderboardGlobal',
+      component: LeaderboardGlobal
     },
 
 

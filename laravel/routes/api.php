@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\LeaderBoardController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']);
+Route::get('/leaderboard', [LeaderBoardController::class, 'globalLeaderboard']);
 
 
 
