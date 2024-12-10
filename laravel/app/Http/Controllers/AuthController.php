@@ -36,6 +36,12 @@ class AuthController extends Controller
         return response()->json(['token' => $token]);
     }
 
+    public function lol()
+    {
+        
+        return DB::select('select * from users');
+    }
+
     public function logout(Request $request)
     {
         $this->purgeExpiredTokens();

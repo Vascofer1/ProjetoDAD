@@ -2,14 +2,23 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useErrorStore } from '@/stores/error'
+import { useRouter } from 'vue-router'
+import { useToast } from '@/components/ui/toast/use-toast'
+import { ToastAction } from '@/components/ui/toast'
+import { h } from 'vue'
 
 import avatarNoneAssetURL from '@/assets/avatar-none.png'
+import { get } from '@vueuse/core'
 
 export const useAuthStore = defineStore('auth', () => {
   const storeError = useErrorStore()
 
+  const { toast } = useToast()
+  const users = ref([])
   const user = ref(null)
   const token = ref('')
+
+  const router = useRouter()
 
   const userName = computed(() => {
     return user.value ? user.value.name : ''
@@ -42,10 +51,16 @@ export const useAuthStore = defineStore('auth', () => {
     return avatarNoneAssetURL
   })
 
+  const userCoins = computed(() => {
+    return user.value ? user.value.coins : 0
+  })
+
   // This function is "private" - not exported by the store
   const clearUser = () => {
     resetIntervalToRefreshToken()
     user.value = null
+    token.value = ''
+    localStorage.removeItem('token')
     axios.defaults.headers.common.Authorization = ''
   }
 
@@ -54,6 +69,8 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const responseLogin = await axios.post('auth/login', credentials)
       token.value = responseLogin.data.token
+      localStorage.setItem('token', token.value)
+      console.log(token)
       axios.defaults.headers.common.Authorization = 'Bearer ' + token.value
       const responseUser = await axios.get('users/me')
       user.value = responseUser.data.data
@@ -107,6 +124,7 @@ export const useAuthStore = defineStore('auth', () => {
         try {
           const response = await axios.post('auth/refreshtoken')
           token.value = response.data.token
+          localStorage.setItem('token', token.value)
           axios.defaults.headers.common.Authorization = 'Bearer ' + token.value
           return true
         } catch (e) {
@@ -125,6 +143,108 @@ export const useAuthStore = defineStore('auth', () => {
     return intervalToRefreshToken
   }
 
+  const restoreToken = async function () {
+    let storedToken = localStorage.getItem('token')
+    if (storedToken) {
+      try {
+        token.value = storedToken
+        axios.defaults.headers.common.Authorization = 'Bearer ' + token.value
+        const responseUser = await axios.get('users/me')
+        user.value = responseUser.data.data
+        repeatRefreshToken()
+        return true
+      } catch {
+        clearUser()
+        return false
+      }
+    }
+    return false
+  }
+
+  //Update User
+  const updateUser = async (user) => {
+    storeError.resetMessages()
+    try {
+      const response = await axios.put('users/' + user.id, user)
+      console.log(user.photoFileName, user)
+      //const index = getIndexOfUser(user.id)
+      const index = user.id
+      if (index > -1) {
+        console.log(index, "lol")
+        // Instead of a direct assignment, object is cloned/copied to the array
+        // This ensures that the object in the array is not the same as the object fetched
+        console.log(Object.assign({}, response.data.data))
+        users.value[index] = Object.assign({}, response.data.data)
+        console.log(index, "lol")
+      }
+      console.log(index, "lol")
+      toast({
+        description: 'User has been updated correctly!',
+      })
+      console.log(index, "lol")
+      console.log("alo", response.data.data)
+      return response.data.data
+    } catch (e) {
+      storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error updating user!')
+      return false
+    }
+  }
+
+
+  const getUser = async (user) => {
+    console.log(user)
+    const responseUser = await axios.get('users/me')
+    user.value = responseUser.data.data
+  }
+
+  const insertUser = async (user) => {
+    storeError.resetMessages()
+    try {
+      console.log(user, "oi")
+      const response = await axios.post('users', user)
+      console.log(users.value.push(response.data.data), "ola")
+      users.value.push(response.data.data)
+      console.log("alo", response.data.data)
+      toast({
+        description: `user #${response.data.data.id} "${response.data.data.name}" was created!`,
+        action: h(ToastAction, {
+          altText: `Login`,
+          onclick: () => {
+            router.push({ name: 'login' })
+          }
+        }, {
+          default: () => `Login`,
+        })
+      })
+      console.log(user, "ola")
+      return response.data.data
+    } catch (e) {
+      storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error creating user!')
+      return false
+    }
+  }
+
+  const deleteUser = async () => {
+    storeError.resetMessages()
+    try {
+        console.log(user)
+        const nickname = user.value.nickname
+        const id = user.value.id
+        await axios.delete('users/' + user.value.id)
+        const index = user.id
+        if (index > -1) {
+          users.value.splice(index, 1)
+        }
+        toast({
+          description: `user #${id} "${nickname}" was deleted!`,
+        })
+        return true
+    } catch (e) {
+        storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error deleting project!')
+        return false
+    }
+  }    
+
   return {
     user,
     userName,
@@ -132,8 +252,14 @@ export const useAuthStore = defineStore('auth', () => {
     userEmail,
     userType,
     userGender,
+    userCoins,
     userPhotoUrl,
+    restoreToken,
     login,
-    logout
+    logout,
+    updateUser,
+    getUser,
+    insertUser,
+    deleteUser
   }
 })
