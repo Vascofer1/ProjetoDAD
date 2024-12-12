@@ -56,6 +56,11 @@ const logout = () => {
             active-class="text-blue-600 font-semibold">
             Login
           </RouterLink>
+          <RouterLink v-show="storeAuth.user" :to="{ name: 'users' }" v-if="storeAuth.user && storeAuth.user.type == 'A'"
+            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-blue-600 font-semibold">
+            Users
+          </RouterLink>
           <button v-show="storeAuth.user" @click="logout" class="w-24 h-10 leading-10 text-center rounded-t-xl 
               border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500">
             Logout
