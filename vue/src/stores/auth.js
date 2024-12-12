@@ -18,6 +18,8 @@ export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
   const token = ref('')
 
+  const router = useRouter()
+
   const userName = computed(() => {
     return user.value ? user.value.name : ''
   })
@@ -51,6 +53,10 @@ export const useAuthStore = defineStore('auth', () => {
       return axios.defaults.baseURL.replaceAll('/api', photoFile)
     }
     return avatarNoneAssetURL
+  })
+
+  const userCoins = computed(() => {
+    return user.value ? user.value.coins : 0
   })
 
 
@@ -95,6 +101,7 @@ export const useAuthStore = defineStore('auth', () => {
         }
         return description
     })
+    
 
   // This function is "private" - not exported by the store
   const clearUser = () => {
@@ -312,6 +319,7 @@ const insertAdmin = async (admin) => {
 
 
   const getUser = async (user) => {
+    console.log(user)
     const responseUser = await axios.get('users/me')
     user.value = responseUser.data.data
   }
@@ -327,12 +335,12 @@ const insertAdmin = async (admin) => {
       toast({
         description: `user #${response.data.data.id} "${response.data.data.name}" was created!`,
         action: h(ToastAction, {
-          altText: `Open new user`,
+          altText: `Login`,
           onclick: () => {
-            router.push({ name: 'profile' })
+            router.push({ name: 'login' })
           }
         }, {
-          default: () => `Open new user`,
+          default: () => `Login`,
         })
       })
       console.log(user, "ola")
@@ -343,6 +351,27 @@ const insertAdmin = async (admin) => {
     }
   }
 
+  /*const deleteUser = async () => {
+    storeError.resetMessages()
+    try {
+        console.log(user)
+        const nickname = user.value.nickname
+        const id = user.value.id
+        await axios.delete('users/' + user.value.id)
+        const index = user.id
+        if (index > -1) {
+          users.value.splice(index, 1)
+        }
+        toast({
+          description: `user #${id} "${nickname}" was deleted!`,
+        })
+        return true
+    } catch (e) {
+        storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error deleting project!')
+        return false
+    }
+  }    
+*/
   return {
     user,
     users,
@@ -351,6 +380,7 @@ const insertAdmin = async (admin) => {
     userEmail,
     userType,
     userGender,
+    userCoins,
     userBlocked,
     userPhotoUrl,
     totalUsers,
@@ -371,6 +401,7 @@ const insertAdmin = async (admin) => {
     fetchUsers,
     deleteUser,
     getUser,
-    insertUser
+    insertUser,
+    deleteUser
   }
 })

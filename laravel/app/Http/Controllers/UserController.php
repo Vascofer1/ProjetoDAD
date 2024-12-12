@@ -79,6 +79,9 @@ class UserController extends Controller
    }
 
 
+
+
+
    public function blockUpdate(User $user)
    {
       $user->blocked = !$user->blocked;

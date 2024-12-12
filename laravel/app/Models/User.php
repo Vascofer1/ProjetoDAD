@@ -22,7 +22,6 @@ class User extends Authenticatable
         'name',
         'email',
         'nickname',
-        'password',
         'photo_url',
         'type',
         'blocked',
