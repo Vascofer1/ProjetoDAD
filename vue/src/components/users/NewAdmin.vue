@@ -38,7 +38,6 @@ const createAdmin = async () => {
   }
 };
 
-// Configuração inicial
 onMounted(() => {
   nicknameInput.value.focus();
 });
