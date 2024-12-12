@@ -15,7 +15,7 @@ const user = ref({
     name: '',
     nickname: '',
     email: '',
-    type: '',
+    type: 'P',
     photoFileName: '',
 })
 

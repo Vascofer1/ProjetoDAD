@@ -36,6 +36,9 @@ const login = () => {
 </script>
 
 <template>
+  <div class="text-center text-2xl font-bold">
+    <h1>MEMORY GAME</h1>
+  </div>
   <Card class="w-[450px] mx-auto my-8 p-4 px-8">
     <CardHeader>
       <CardTitle>Login</CardTitle>

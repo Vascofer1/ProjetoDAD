@@ -1,110 +1,36 @@
 <script setup>
-import { ref, onMounted, useTemplateRef } from 'vue';
-import axios from 'axios';
+import { ref } from 'vue'
+import {useRouter} from 'vue-router'
+import UserForm from './UserForm.vue'
+import { useAuthStore } from '@/stores/auth'
+import { useErrorStore } from '@/stores/error'
 
-// Referências e estados
-const newName = ref('');
-const newNickname = ref('');
-const newEmail = ref('');
-const newPassword = ref('');
-const nicknameInput = useTemplateRef('nicknameinput');
+const userStore = useAuthStore()
+const storeError = useErrorStore()
 
-// Função para criar um novo administrador
-const createAdmin = async () => {
-  if (newName.value.trim() && newNickname.value.trim() && newEmail.value.trim() && newPassword.value.trim()) {
-    const payload = {
-      name: newName.value,
-      nickname: newNickname.value,
-      email: newEmail.value,
-      password: newPassword.value,
-      type: 'A', // Sempre criar um administrador
-    };
+const router = useRouter()
 
-    try {
-      const response = await axios.post('/api/admin/users', payload);
-      alert(`Administrador criado com sucesso: ${response.data.nickname}`);
-      // Limpar os campos após criar o utilizador
-      newName.value = '';
-      newNickname.value = '';
-      newEmail.value = '';
-      newPassword.value = '';
-      nicknameInput.value.focus();
-    } catch (error) {
-      console.error('Erro ao criar administrador:', error);
-      alert('Erro ao criar administrador. Verifica os campos e tenta novamente.');
-    }
-  } else {
-    alert('Por favor, preencha todos os campos.');
-  }
-};
+const user = ref({
+    id: 0,
+    name: '',
+    nickname: '',
+    email: '',
+    type: 'A',
+    photoFileName: '',
+})
 
-onMounted(() => {
-  nicknameInput.value.focus();
-});
+const create = async (user) => {
+    if (await userStore.insertUser(user)) {        
+        router.push({name: 'home'})
+    } 
+}
+
+const cancel = () => {
+    storeError.resetMessages()
+    router.back()
+}
 </script>
 
 <template>
-  <div class="py-4">
-    <h1 class="text-2xl font-bold mb-4">Criar Novo Administrador</h1>
-    <form @submit.prevent="createAdmin">
-      <!-- Nome -->
-      <div class="mb-4">
-        <label for="name" class="font-medium">Nome</label>
-        <input
-          type="text"
-          id="name"
-          class="w-full p-2 border rounded-lg"
-          v-model="newName"
-          required
-        />
-      </div>
-
-      <!-- Nickname -->
-      <div class="mb-4">
-        <label for="nickname" class="font-medium">Nickname</label>
-        <input
-          ref="nicknameinput"
-          type="text"
-          id="nickname"
-          class="w-full p-2 border rounded-lg"
-          v-model="newNickname"
-          required
-        />
-      </div>
-
-      <!-- Email -->
-      <div class="mb-4">
-        <label for="email" class="font-medium">Email</label>
-        <input
-          type="email"
-          id="email"
-          class="w-full p-2 border rounded-lg"
-          v-model="newEmail"
-          required
-        />
-      </div>
-
-      <!-- Password -->
-      <div class="mb-4">
-        <label for="password" class="font-medium">Password</label>
-        <input
-          type="password"
-          id="password"
-          class="w-full p-2 border rounded-lg"
-          v-model="newPassword"
-          required
-        />
-      </div>
-
-      <!-- Botão para criar -->
-      <div class="flex justify-end">
-        <button
-          type="submit"
-          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          Criar Administrador
-        </button>
-      </div>
-    </form>
-  </div>
+    <UserForm :user="user" title="Create New Admin" @save="create" @cancel="cancel"></UserForm>
 </template>

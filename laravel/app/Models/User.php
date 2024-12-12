@@ -24,6 +24,10 @@ class User extends Authenticatable
         'nickname',
         'password',
         'photo_url',
+        'type',
+        'blocked',
+        'brain_coins_balance',
+        'deleted_at',
     ];
 
     /**

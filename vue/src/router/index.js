@@ -1,7 +1,6 @@
 import HomeComponent from '@/components/HomeComponent.vue'
 import LaravelTester from '@/components/LaravelTester.vue'
 import NewAdmin from '@/components/users/NewAdmin.vue'
-import NewUser from '@/components/users/NewUser.vue'
 import UserList from '@/components/users/UserList.vue'
 import LoginPage from '@/components/LoginPage.vue'
 import Profile from '@/components/users/Profile.vue'
@@ -9,6 +8,9 @@ import WebSocketTester from '@/components/WebSocketTester.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import Register from '@/components/users/Register.vue'
+import UserUpdate from '@/components/users/UserUpdate.vue'
+import User from '@/components/users/User.vue'
+import Users from '@/components/users/Users.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,11 +47,15 @@ const router = createRouter({
       path: '/users/register',
       name: 'register',
       component: Register
-    }
-    , 
-    {path: '/user', component: NewUser},
-    {path: '/admin', component: NewAdmin},
-    {path: '/users', name: 'users', component: UserList}
+    },
+    {
+      path: '/users/:id',
+      name: 'updateUser',
+      component: UserUpdate,
+      props: route => ({ id: parseInt(route.params.id) })
+    },
+    {path: '/admin', name: 'admin', component: NewAdmin},
+    {path: '/users', name: 'users', component: Users}
   ]
 });
 

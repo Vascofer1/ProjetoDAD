@@ -41,6 +41,10 @@ export const useAuthStore = defineStore('auth', () => {
     return user.value ? user.value.gender : ''
   })
 
+  const userBlocked = computed(() => {
+    return user.value ? user.value.blocked : ''
+  })
+
   const userPhotoUrl = computed(() => {
     const photoFile = user.value ? (user.value.photoFileName ?? '') : ''
     if (photoFile) {
@@ -48,6 +52,49 @@ export const useAuthStore = defineStore('auth', () => {
     }
     return avatarNoneAssetURL
   })
+
+
+  const filterByType = ref(null)
+  const filterByBlocked = ref(null)
+  const filterByNickname = ref(null)
+    
+    const totalUsers = computed(() => {
+        return users.value ? users.value.length : 0
+    })
+
+    const totalFilteredUsers = computed(() => {
+        return filteredUsers.value ? filteredUsers.value.length : 0
+    })
+    
+    // This function is "private" - not exported by the store
+    const userInFilter = (user) => {
+      if (filterByType.value !== null && user.type !== filterByType.value) {
+          return false
+      }
+      if (filterByBlocked.value !== null && user.blocked !== filterByBlocked.value) {
+          return false
+      }
+      if (filterByNickname.value !== null && !user.nickname.toLowerCase().includes(filterByNickname.value.toLowerCase())) {
+          return false
+      }
+      return true
+  }
+
+    const filteredUsers = computed(() => users.value.filter(userInFilter))
+
+    const filterDescription = computed(() => {
+        let description = 'All users'
+        if (filterByType.value) {
+            description += ' of type ' + filterByType.value
+        }
+        if (filterByBlocked.value) {
+            description += ' and blocked'
+        }
+        if (filterByNickname.value) {
+            description += ' with nickname containing ' + filterByNickname.value
+        }
+        return description
+    })
 
   // This function is "private" - not exported by the store
   const clearUser = () => {
@@ -64,6 +111,7 @@ export const useAuthStore = defineStore('auth', () => {
       const responseLogin = await axios.post('auth/login', credentials)
       token.value = responseLogin.data.token
       localStorage.setItem('token', token.value)
+      console.log(token)
       axios.defaults.headers.common.Authorization = 'Bearer ' + token.value
       const responseUser = await axios.get('users/me')
       user.value = responseUser.data.data
@@ -85,6 +133,24 @@ export const useAuthStore = defineStore('auth', () => {
     storeError.resetMessages()
     const response = await axios.get('users')
     users.value = response.data.data
+}
+
+
+const fetchUser = async (userId) => {
+  storeError.resetMessages()
+  const response = await axios.get('users/' + usertId)
+  const index = getIndexOfUser(userId)
+  if (index > -1) {
+      // Instead of a direct assignment, object is cloned/copied to the array
+      // This ensures that the object in the array is not the same as the object fetched
+      users.value[index] = Object.assign({}, response.data.data)  
+      
+  }
+  return response.data.data
+}
+
+const getIndexOfUser = (userId) => {
+  return users.value.findIndex((p) => p.id === userId)
 }
 
   const logout = async () => {
@@ -160,6 +226,8 @@ export const useAuthStore = defineStore('auth', () => {
     return false
   }
 
+
+
   //Update User
   const updateUser = async (user) => {
     storeError.resetMessages()
@@ -188,6 +256,59 @@ export const useAuthStore = defineStore('auth', () => {
       return false
     }
   }
+
+  const canUpdateDeleteUser = (targetUser) => {
+    return (user.value.type === 'A' && user.value.id !== targetUser.id)
+  }
+
+
+  const deleteUser = async (user) => {
+    storeError.resetMessages()
+    try {
+      await axios.patch('users/' + user.id + '/deleted')
+      const index = getIndexOfUser(user.id)
+      if (index > -1) {
+        users.value.splice(index, 1)
+      }
+      return true
+    } catch (e) {
+      storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error deleting user!')
+      return false
+    }
+  }
+
+const blockUser = async (user) => {
+  storeError.resetMessages()
+  try {
+      console.log(user)
+      await axios.patch('users/' + user.id + '/block')
+      const index = getIndexOfUser(user.id)
+      if (index > -1) {
+          users.value[index].blocked = !users.value[index].blocked
+      }
+      return true
+  } catch (e) {
+      storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error blocking user!')
+      return false
+  }
+}
+
+
+
+const insertAdmin = async (admin) => {
+  storeError.resetMessages()
+  try {
+      const response = await axios.post('admin', admin)
+      users.value.push(response.data.data)
+      toast({
+          description: `Admin #${response.data.data.id} was created!`,
+      })
+      return response.data.data
+  } catch (e) {
+      storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error inserting admin!')
+      return false
+  }
+}
 
 
   const getUser = async (user) => {
@@ -224,16 +345,31 @@ export const useAuthStore = defineStore('auth', () => {
 
   return {
     user,
+    users,
     userName,
     userFirstLastName,
     userEmail,
     userType,
     userGender,
+    userBlocked,
     userPhotoUrl,
+    totalUsers,
+    totalFilteredUsers,
+    filteredUsers,
+    filterByType,
+    filterByBlocked,
+    filterByNickname,
+    filterDescription,
     restoreToken,
+    canUpdateDeleteUser,
+    insertAdmin,
+    blockUser,
     login,
     logout,
     updateUser,
+    fetchUser,
+    fetchUsers,
+    deleteUser,
     getUser,
     insertUser
   }
