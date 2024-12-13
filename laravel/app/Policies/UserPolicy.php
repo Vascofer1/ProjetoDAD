@@ -22,9 +22,14 @@ class UserPolicy
         return true; 
     } 
 
-    public function view(User $user, Project $project): bool 
-    { 
-        return true; 
+
+    public function view(User $user): bool 
+    {
+         
+        if ($user->type == 'A') {
+            return true;
+        }
+        return null;
     } 
  
     public function create(User $user): bool 
@@ -43,5 +48,11 @@ class UserPolicy
             return false; 
         } 
         return true; 
-    } 
+    }
+
+
+    public function block(User $authUser, User $user): bool 
+    { 
+        return $authUser->id !== $user->id && $authUser->type == 'A' && $user->type == 'P';
+    }
 }

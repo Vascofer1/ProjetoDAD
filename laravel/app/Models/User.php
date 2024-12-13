@@ -23,7 +23,10 @@ class User extends Authenticatable
         'email',
         'nickname',
         'photo_url',
+        'type',
+        'blocked',
         'brain_coins_balance',
+        'deleted_at',
     ];
 
     /**

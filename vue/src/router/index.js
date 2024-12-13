@@ -1,5 +1,7 @@
 import HomeComponent from '@/components/HomeComponent.vue'
 import LaravelTester from '@/components/LaravelTester.vue'
+import NewAdmin from '@/components/users/NewAdmin.vue'
+import UserList from '@/components/users/UserList.vue'
 import LoginPage from '@/components/LoginPage.vue'
 import Profile from '@/components/users/Profile.vue'
 import WebSocketTester from '@/components/WebSocketTester.vue'
@@ -11,6 +13,9 @@ import RemoveUser from '@/components/users/RemoveUser.vue'
 import TransactionCreate from '@/components/transactions/TransactionCreate.vue'
 import Transactions from '@/components/transactions/Transactions.vue'
 import TransactionRead from '@/components/transactions/TransactionRead.vue'
+import UserUpdate from '@/components/users/UserUpdate.vue'
+import User from '@/components/users/User.vue'
+import Users from '@/components/users/Users.vue'
 import Game3x4 from '../components/games/Game3x4.vue';
 import Game4x4 from '../components/games/Game4x4.vue';
 import Game6x6 from '../components/games/Game6x6.vue';
@@ -73,6 +78,15 @@ const router = createRouter({
       name: 'transactions',
       component: Transactions
     },
+    {
+      path: '/users/:id',
+      name: 'updateUser',
+      component: UserUpdate,
+      props: route => ({ id: parseInt(route.params.id) })
+    },
+    {path: '/admin', name: 'admin', component: NewAdmin},
+    {path: '/users', name: 'users', component: Users},
+    
     { path: '/dashboard',
       name: 'dashboard',
       component: Dashboard ,
@@ -96,7 +110,7 @@ const router = createRouter({
       name: 'game6x6',
       component: Game6x6,
       props: true, // Isso permite que o Vue Router passe os parâmetros como props para o componente
-    },
+    }
     
     
   ]
@@ -118,5 +132,7 @@ router.beforeEach(async (to, from, next) => {
   // all other routes are accessible to everyone, including anonymous users 
   next()
 })
+
+
 
 export default router
