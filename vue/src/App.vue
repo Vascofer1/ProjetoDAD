@@ -76,6 +76,11 @@ const logout = () => {
             active-class="text-blue-600 font-semibold">
             Transaction History
           </RouterLink>
+          <RouterLink v-show="storeAuth.userType == 'P'" to="/dashboard"
+            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-blue-600 font-semibold">
+            Dashboard
+          </RouterLink>
         </nav>
       </div>
     </header>

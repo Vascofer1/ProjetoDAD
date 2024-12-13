@@ -27,7 +27,7 @@ class TransactionRequest extends FormRequest
             //'user_id' => 'required|exists:users,id',
             'game_id' => $this->input('type') === 'I' ? 'required|exists:games,id' : 'nullable|exists:games,id',
             'euros' => $this->input('type') === 'P' ? 'required|numeric|min:0' : 'nullable|numeric|min:0',
-            //'brain_coins' => 'required|integer',
+            'brain_coins' => $this->input('type') === 'I' ? 'required|integer': 'nullable|integer',
             'payment_type' => $this->input('type') === 'P' ? 'required|in:MBWAY,PAYPAL,IBAN,MB,VISA' : 'nullable|in:MBWAY,PAYPAL,IBAN,MB,VISA',
             'payment_reference' => $this->input('type') === 'P' ? 'required|string|max:255' : 'nullable|string|max:255',
         ];

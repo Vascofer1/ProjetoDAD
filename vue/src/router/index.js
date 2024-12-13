@@ -3,6 +3,7 @@ import LaravelTester from '@/components/LaravelTester.vue'
 import LoginPage from '@/components/LoginPage.vue'
 import Profile from '@/components/users/Profile.vue'
 import WebSocketTester from '@/components/WebSocketTester.vue'
+import Dashboard from '../components/Dashboard.vue';
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import Register from '@/components/users/Register.vue'
@@ -10,6 +11,10 @@ import RemoveUser from '@/components/users/RemoveUser.vue'
 import TransactionCreate from '@/components/transactions/TransactionCreate.vue'
 import Transactions from '@/components/transactions/Transactions.vue'
 import TransactionRead from '@/components/transactions/TransactionRead.vue'
+import Game3x4 from '../components/games/Game3x4.vue';
+import Game4x4 from '../components/games/Game4x4.vue';
+import Game6x6 from '../components/games/Game6x6.vue';
+import MemoryBoard from '@/components/MemoryBoard.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -67,7 +72,33 @@ const router = createRouter({
       path: '/transactions',
       name: 'transactions',
       component: Transactions
-    }
+    },
+    { path: '/dashboard',
+      name: 'dashboard',
+      component: Dashboard ,
+      meta: { requiresAuth: true },
+    },
+    
+    {
+      path: '/games/:gameId/:boardId',
+      name: 'game3x4',
+      component: Game3x4,
+      props: true, // Isso permite que o Vue Router passe os parâmetros como props para o componente
+    },
+    {
+      path: '/games/:gameId/:boardId',
+      name: 'game4x4',
+      component: Game4x4,
+      props: true, // Isso permite que o Vue Router passe os parâmetros como props para o componente
+    },
+    {
+      path: '/games/:gameId/:boardId',
+      name: 'game6x6',
+      component: Game6x6,
+      props: true, // Isso permite que o Vue Router passe os parâmetros como props para o componente
+    },
+    
+    
   ]
 });
 
@@ -80,7 +111,7 @@ router.beforeEach(async (to, from, next) => {
     await storeAuth.restoreToken()
   }
   // routes "profile" and "RemoveUser" are only accessible when user is logged in 
-  if (((to.name == 'profile') || (to.name == 'RemoveUser') || (to.name == 'create transaction') || (to.name == 'transactions')) && (!storeAuth.user)) {
+  if (((to.name == 'profile') || (to.name == 'RemoveUser') || (to.name == 'create transaction') || (to.name == 'transactions')) || (to.name == 'dashboard') && (!storeAuth.user)) {
     next({ name: 'login' })
     return
   }
