@@ -42,8 +42,10 @@ class TransactionController extends Controller
         $transaction->fill($request->validated());
         $transaction->user_id = $user->id;
 
-        $transaction->brain_coins = $request->input('euros') * 10;
-
+        if($transaction->type == 'P'){
+            $transaction->brain_coins = $request->input('euros') * 10;
+        }
+        
         $transaction->transaction_datetime = now(); // ou date('Y-m-d H:i:s')
 
         $transaction->save();
@@ -53,6 +55,8 @@ class TransactionController extends Controller
 
         return new TransactionResource($transaction);
     }
+
+
 
     public function show(Transaction $transaction, Request $request)
     {

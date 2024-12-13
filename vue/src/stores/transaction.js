@@ -112,11 +112,40 @@ export const useTransactionStore = defineStore('transaction', () => {
     }
 
 
+    const insertTransactionTypeI = async (transaction) => {
+        storeError.resetMessages()
+        try {
+            const response = await axios.post('transactions', transaction)
+            transactions.value.push(response.data.data)
+            toast({
+                description: `Transaction #${response.data.data.id} was created!`,
+                action: h(ToastAction, {
+                    altText: `Open new transaction`,
+                    onclick: () => {
+                        router.push({
+                            name: 'showTransaction',
+                            params: { id: response.data.data.id }
+                        })
+                    }
+                }, {
+                    default: () => `Open new transaction`,
+                })
+            })
+            console.log(transaction, "ola")
+            return response.data.data
+        } catch (e) {
+            storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error creating transaction!')
+            return false
+        }
+    }
+
+
     return {
         transactions,
         totalTransactions,
         fetchTransactions,
         fetchTransaction,
-        insertTransactionPurchase
+        insertTransactionPurchase,
+        insertTransactionTypeI
     }
 })
