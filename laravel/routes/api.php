@@ -20,7 +20,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user/multiplayer', [HistoryController::class, 'multiPlayerHistory']);
     Route::get('/user/all', [HistoryController::class, 'allGames']);
 
-    Route::get('/leaderboard/personal/{userId}', [LeaderBoardController::class, 'personalLeaderboard']);
+    Route::get('/leaderboard/personal', [LeaderBoardController::class, 'personalLeaderboard']);
    });
 
 Route::post('/auth/login', [AuthController::class, 'login']);

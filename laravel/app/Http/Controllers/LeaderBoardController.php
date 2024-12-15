@@ -73,8 +73,11 @@ class LeaderBoardController extends Controller
     }
     
 
-    public function personalLeaderboard($userId)
+    public function personalLeaderboard(Request $request)
     {
+
+        $user = auth()->user();
+        $userId = $user->id;
 
         // Single-player games: Best time and minimum turns for each board size
         $singlePlayerStats = DB::table('games')
