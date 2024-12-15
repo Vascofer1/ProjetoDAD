@@ -22,7 +22,7 @@ class UserResource extends JsonResource
     'type' => $this->type,
     'photoFileName' => $this->photo_url ? '/storage/photos/' . $this->photo_url : null,
     'coins' => $this->brain_coins_balance ? $this->brain_coins_balance : 0,
-    'blocked' => $this->blocked ? true : false,
+    'blocked' => $this->blocked,
     'deleted_at' => $this->deleted_at,
  ];
 }

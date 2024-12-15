@@ -125,7 +125,7 @@ router.beforeEach(async (to, from, next) => {
     await storeAuth.restoreToken()
   }
   // routes "profile" and "RemoveUser" are only accessible when user is logged in 
-  if (((to.name == 'profile') || (to.name == 'RemoveUser') || (to.name == 'create transaction') || (to.name == 'transactions')) || (to.name == 'dashboard') && (!storeAuth.user)) {
+  if (((to.name == 'profile') || (to.name == 'RemoveUser') || (to.name == 'create transaction') || (to.name == 'transactions') || (to.name == 'dashboard')) && (!storeAuth.user)) {
     next({ name: 'login' })
     return
   }

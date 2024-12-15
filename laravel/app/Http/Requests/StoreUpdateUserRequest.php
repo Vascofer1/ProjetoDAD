@@ -32,7 +32,7 @@ class StoreUpdateUserRequest extends FormRequest
             'password' => $userId ? 'nullable|string|min:3|confirmed' : 'required|string|min:3|confirmed',
             'type' => 'required|in:A,P',
             'blocked' => 'required|integer:0,1',
-            'brain_coins_balance' => 'required|integer',
+            'coins' => 'required|integer',
             'deleted_at' => 'nullable|date',
             /*
             

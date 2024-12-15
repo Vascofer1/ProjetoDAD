@@ -48,12 +48,17 @@ class UserController extends Controller
 
    public function store(StoreUpdateUserRequest $request)
    {
-       $user = new User();
-       $user->fill($request->validated());
-      // $user->created_by_id = $request->user() ? $request->user()->id : null; 
-       $user->save();
+      $user = new User();
+      $user->fill($request->validated());
 
-       return new UserResource($user);
+      if ($request->filled('password')) {
+         $user->password = bcrypt($request->input('password'));
+      }
+
+      // $user->created_by_id = $request->user() ? $request->user()->id : null; 
+      $user->save();
+
+      return new UserResource($user);
    }
 
 
