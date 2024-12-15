@@ -18,11 +18,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/user/singleplayer', [HistoryController::class, 'singlePlayerHistory']);
     Route::get('/user/multiplayer', [HistoryController::class, 'multiPlayerHistory']);
+    Route::get('/user/all', [HistoryController::class, 'allGames']);
+
+    Route::get('/leaderboard/personal/{userId}', [LeaderBoardController::class, 'personalLeaderboard']);
    });
 
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']);
-Route::get('/leaderboard', [LeaderBoardController::class, 'globalLeaderboard']);
+Route::get('/leaderboard/global', [LeaderBoardController::class, 'globalLeaderboard']);
+
 
 
 

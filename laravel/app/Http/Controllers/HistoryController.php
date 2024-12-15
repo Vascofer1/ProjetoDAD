@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Models\Game;
 
 class HistoryController extends Controller
 {
@@ -46,6 +47,17 @@ class HistoryController extends Controller
                 return response()->json(['message' => 'No games found'], 404);               
             }
             return response()->json($games);
+
+        }
+
+
+        public function allGames(Request $request)
+        {
+
+            $user = auth()->user();
+            $userId = $user->id;
+
+            return response()->json(Game::all());
 
         }
 

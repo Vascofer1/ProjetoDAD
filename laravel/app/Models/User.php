@@ -48,4 +48,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function multiplayerGamesPlayed()
+    {
+        return $this->hasMany(MultiplayerGamesPlayed::class, 'user_id', 'id');
+    }
 }
