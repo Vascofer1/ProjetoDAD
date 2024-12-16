@@ -31,7 +31,7 @@ const cancel = () => {
 
 const deleteConfirmed = async () => {
   storeError.resetMessages()
-
+  
   if (nickname.value == user.value.nickname) {
         if (await userStore.deleteUser()) {
             router.push({ name: 'home' }); // Redirecionar para a pagina principal

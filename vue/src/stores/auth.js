@@ -123,6 +123,10 @@ export const useAuthStore = defineStore('auth', () => {
       const responseUser = await axios.get('users/me')
       user.value = responseUser.data.data
       repeatRefreshToken()
+
+      //mandar para a pagina principal depois do login
+      router.push({ name: 'home' })
+
       return user.value
     } catch (e) {
       clearUser()
@@ -165,6 +169,7 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       await axios.post('auth/logout')
       clearUser()
+      router.push({ name: 'login' }) //redirecionar para o login
       return true
     } catch (e) {
       clearUser()
@@ -239,8 +244,6 @@ export const useAuthStore = defineStore('auth', () => {
   const updateUser = async (user) => {
     storeError.resetMessages()
     try {
-
-      console.log(user.photo_url)
       // Verifique se o campo photo_url é um arquivo e adicione ao FormData
       if (user.photo_url instanceof File) {
         updateUserPhoto(user.photo_url, user.id)
@@ -250,7 +253,6 @@ export const useAuthStore = defineStore('auth', () => {
       // Enviar a requisição PUT com os dados do user
       const response = await axios.put(`users/${user.id}`, user);
       //const response = await axios.put('users/' + user.id, user)
-      console.log(user.photoFileName, user)
       //const index = getIndexOfUser(user.id)
       const index = user.id
       if (index > -1) {
@@ -261,7 +263,6 @@ export const useAuthStore = defineStore('auth', () => {
       toast({
         description: 'User has been updated correctly!',
       })
-      console.log("alo", response.data.data)
       return response.data.data
     } catch (e) {
       storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error updating user!')
@@ -298,20 +299,27 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
 
-  const deleteUser = async (user) => {
+  /*const deleteUser = async (user) => {
     storeError.resetMessages()
     try {
+      console.log(user.value.id, user.id)
+      const nickname = user.value.nickname
+      const id = user.value.id    
+
       await axios.patch('users/' + user.id + '/deleted')
       const index = getIndexOfUser(user.id)
       if (index > -1) {
         users.value.splice(index, 1)
       }
+      toast({
+        description: `user #${id} "${nickname}" was deleted!`,
+      })
       return true
     } catch (e) {
       storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error deleting user!')
       return false
     }
-  }
+  }*/
 
   const blockUser = async (user) => {
     storeError.resetMessages()
@@ -334,11 +342,21 @@ export const useAuthStore = defineStore('auth', () => {
   const insertAdmin = async (admin) => {
     storeError.resetMessages()
     try {
+      const photo = user.photo_url
+      user.photo_url = null
+      user.photoFileName = null
+
       const response = await axios.post('admin', admin)
       users.value.push(response.data.data)
       toast({
         description: `Admin #${response.data.data.id} was created!`,
       })
+
+      // Verifique se o campo photo_url é um arquivo e adicione ao FormData
+      if (photo instanceof File) {
+        updateUserPhoto(photo, response.data.data.id)
+      }
+
       return response.data.data
     } catch (e) {
       storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error inserting admin!')
@@ -348,7 +366,6 @@ export const useAuthStore = defineStore('auth', () => {
 
 
   const getUser = async (user) => {
-    console.log(user)
     const responseUser = await axios.get('users/me')
     user.value = responseUser.data.data
   }
@@ -356,6 +373,10 @@ export const useAuthStore = defineStore('auth', () => {
   const insertUser = async (user) => {
     storeError.resetMessages()
     try {
+      const photo = user.photo_url
+      user.photo_url = null
+      user.photoFileName = null
+
       console.log(user, "oi")
       const response = await axios.post('users', user)
       console.log(users.value.push(response.data.data), "ola")
@@ -373,6 +394,12 @@ export const useAuthStore = defineStore('auth', () => {
         })
       })
       console.log(user, "ola")
+
+      // Verifique se o campo photo_url é um arquivo e adicione ao FormData
+      if (photo instanceof File) {
+        updateUserPhoto(photo, response.data.data.id)
+      }
+
       return response.data.data
     } catch (e) {
       storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error creating user!')
@@ -380,27 +407,30 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  /*const deleteUser = async () => {
+  const deleteUser = async () => {
     storeError.resetMessages()
     try {
-        console.log(user)
-        const nickname = user.value.nickname
-        const id = user.value.id
-        await axios.delete('users/' + user.value.id)
-        const index = user.id
-        if (index > -1) {
-          users.value.splice(index, 1)
-        }
-        toast({
-          description: `user #${id} "${nickname}" was deleted!`,
-        })
-        return true
+      const nickname = user.value.nickname
+      const id = user.value.id
+
+      await axios.delete('users/' + id + '/deleted')
+      const index = getIndexOfUser(id)
+      if (index > -1) {
+        users.value.splice(index, 1)
+      }
+      toast({
+        description: `user #${id} "${nickname}" was deleted!`,
+      })
+      logout()
+      router.push({ name: 'login' })
+      return true
     } catch (e) {
-        storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error deleting project!')
-        return false
+      storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error deleting user!')
+      return false
     }
   }    
-*/
+
+  
   return {
     user,
     users,

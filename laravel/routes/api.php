@@ -19,12 +19,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/auth/refreshtoken', [AuthController::class, 'refreshToken']);
     Route::get('/users/me', [UserController::class , 'showMe']);
     Route::put('/users/{user}', [UserController::class, 'update']);//->can('update', 'user'); 
-    Route::post('/users/{user}', [UserController::class, 'updateUserPhoto']);
-    Route::delete('/users/{user}', [UserController::class, 'destroy'])->can('delete', 'user');
+    //Route::delete('/users/{user}', [UserController::class, 'destroy'])->can('delete', 'user');
     Route::get('/users', [UserController::class, 'index'])->can('view', User::class);
     Route::get('/users/{user}', [UserController::class, 'show']);
     Route::patch('/users/{user}/block', [UserController::class, 'blockUpdate'])->can('block', 'user');
-    Route::patch('/users/{user}/deleted', [UserController::class, 'deleteUser']);
+    Route::delete('/users/{user}/deleted', [UserController::class, 'deleteUser']);
 
     //transactions
     Route::post('/transactions', [TransactionController::class , 'store']);
@@ -46,6 +45,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']);
 Route::get('/leaderboard/global', [LeaderBoardController::class, 'globalLeaderboard']);
+
+//photo
+Route::post('/users/{user}', [UserController::class, 'updateUserPhoto']);
 
 
 

@@ -32,7 +32,7 @@ const cancel = () => {
 
 const login = () => {
   storeAuth.login(credentials.value)
-  router.push({ name: 'home' }); // Redirecionar para a pagina principal
+  //router.push({ name: 'home' }); // Redirecionar para a pagina principal
 } 
 </script>
 

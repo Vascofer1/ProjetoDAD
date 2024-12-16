@@ -26,24 +26,21 @@ class UserController extends Controller
       return new UserResource($request->user());
    }
 
-   public function destroy(User $user)
+   /*public function destroy(User $user)
     {
         $user->delete();
         return response()->json(null, 204);
-    }
+    }*/
 
 
     public function deleteUser(User $user)
     {
-        $user->deleted_at = now();
-        $user->save();
+      $user->brain_coins_balance = 0;
+      $user->deleted_at = now();
+      $user->save();
 
-        return response()->json(null, 204);
+      return response()->json(null, 204);
     }
-
-
-    // apagar o user com um soft delete
-
 
 
    public function store(StoreUpdateUserRequest $request)
@@ -80,15 +77,6 @@ class UserController extends Controller
    public function blockUpdate(User $user)
    {
       $user->blocked = !$user->blocked;
-      $user->save();
-
-      return new UserResource($user);
-   }
-
-
-   public function userDeleted(User $user)
-   {
-      $user->deleted_at = now();
       $user->save();
 
       return new UserResource($user);
