@@ -86,6 +86,17 @@ const logout = () => {
             active-class="text-blue-600 font-semibold">
             Dashboard
           </RouterLink>
+          <RouterLink v-show="storeAuth.user" to="/leaderboards"
+            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-blue-600 font-semibold">
+            Leaderboards
+          </RouterLink>
+          <RouterLink v-show="storeAuth.user" to="/historico"
+            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-blue-600 font-semibold">
+            Game History
+          </RouterLink>
+
         </nav>
       </div>
     </header>

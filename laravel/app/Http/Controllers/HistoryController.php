@@ -55,9 +55,23 @@ class HistoryController extends Controller
         {
 
             $user = auth()->user();
-            $userId = $user->id;
+            $games = Game::join('boards', 'games.board_id', '=', 'boards.id')
+            ->select(
+                'games.id',
+                'games.winner_user_id',
+                'games.created_user_id',
+                'boards.board_cols',
+                'boards.board_rows',
+                'games.began_at',
+                'games.total_time',
+                'games.total_turns_winner',
+                'games.type'
+            )
+            ->orderBy('games.id')
+            ->paginate(20);
 
-            return response()->json(Game::all());
+
+            return response()->json($games);
 
         }
 

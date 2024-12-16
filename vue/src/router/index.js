@@ -24,6 +24,9 @@ import MultiPlayerHistory from '@/components/historico/MultiPlayerHistory.vue'
 import SinglePlayerHistory from '@/components/historico/SinglePlayerHistory.vue'
 import LeaderboardGlobal from '@/components/leaderboards/LeaderboardGlobal.vue'
 import LeaderboardPessoal from '@/components/leaderboards/LeaderboardPessoal.vue'
+import AllGamesHistory from '@/components/historico/AllGamesHistory.vue'
+import Leaderboards from '@/components/Leaderboards.vue'
+import GameHistory from '@/components/GameHistory.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -117,6 +120,11 @@ const router = createRouter({
       props: true, // Isso permite que o Vue Router passe os parâmetros como props para o componente
     },
     {
+      path: '/historico/',
+      name: 'gameHistory',
+      component: GameHistory,
+    },
+    {
       path: '/historico/singleplayer',
       name: 'singleplayerHistory',
       component: SinglePlayerHistory,
@@ -125,6 +133,16 @@ const router = createRouter({
       path: '/historico/multiplayer',
       name: 'MultiplayerHistory',
       component: MultiPlayerHistory
+    },
+    {
+      path: '/historico/all',
+      name: 'AllGamesHistory',
+      component: AllGamesHistory
+    },
+    {
+      path: "/leaderboards",
+      name: "leaderboards",
+      component: Leaderboards,
     },
     {
       path: '/leaderboard/global',
