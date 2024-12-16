@@ -28,20 +28,6 @@ class LeaderBoardController extends Controller
         ->groupBy('boards.board_cols', 'boards.board_rows') 
         ->get();
 
-
-        //Returns top5 players with most wins
-        $multiPlayerLeaderboard = Game::where('games.type', 'M')
-            ->join('users', 'games.winner_user_id', '=', 'users.id')
-            ->select(
-                'users.nickname',
-                DB::raw('COUNT(games.winner_user_id) as total_victories')
-            )
-            ->where('games.type', 'M') // Multiplayer games
-            ->groupBy('users.nickname')
-            ->orderByDesc('total_victories')
-            ->limit(5)
-            ->get();
-
         
         $multiplayerLeaderboard = MultiplayerGamesPlayed::selectRaw('
             user_id,
@@ -61,6 +47,8 @@ class LeaderBoardController extends Controller
                     'board_rows' => $board->board_rows,
                     'best_time' => $board->best_time,
                     'minimum_turns' => $board->minimum_turns,
+                    'best_time_player' => $board->best_time_player,
+                    'minimum_turns_player' => $board->min_turns_player
                 ];
             }),
             'multiplayer' => $multiplayerLeaderboard->map(function ($player) {

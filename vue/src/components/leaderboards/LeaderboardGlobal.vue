@@ -8,14 +8,18 @@
           <tr>
             <th>Board Size</th>
             <th>Best Time</th>
+            <th>Best Time Holder</th>
             <th>Minimum Turns</th>
+            <th>Minimum Turns Holder</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in singlePlayer" :key="index">
             <td>{{ item.boardSize }}</td>
             <td>{{ item.bestTime }}</td>
+            <td>{{ item.bestTimePlayer }}</td>
             <td>{{ item.minimumTurns }}</td>
+            <td>{{ item.minimumTurnsPlayer }}</td>
           </tr>
         </tbody>
       </table>
@@ -69,7 +73,9 @@ export default {
         singlePlayer.value = dados.value.single_player.map((item) => ({
           boardSize: `${item.board_cols}x${item.board_rows}`,
           bestTime: item.best_time,
+          bestTimePlayer: item.best_time_player,
           minimumTurns: item.minimum_turns,
+          minimumTurnsPlayer: item.minimum_turns_player
         }));
 
         // Map multiplayer data
