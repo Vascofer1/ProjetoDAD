@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GameController;
+use App\Models\Game;
 
 Route::get('/users/lol', [AuthController::class , 'lol']);
 Route::get('/transactions/lol', [TransactionController::class , 'lol']);

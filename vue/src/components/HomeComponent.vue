@@ -10,7 +10,7 @@
 
         <div class="max-w-2xl mx-auto px-4 space-y-4">
             <h1 class="text-3xl font-bold text-gray-900 sm:text-4xl">
-                DAD Intermediate Submission
+                WELCOME TO MEMORY GAME
             </h1>
 
             <p class="text-lg text-gray-600 max-w-prose">

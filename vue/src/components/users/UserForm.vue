@@ -14,6 +14,7 @@ const props = defineProps({
         default: 'User'
     },
     type: {
+    type: {
         type: String
     }
 })
@@ -93,7 +94,7 @@ const handleFileChange = (event) => {
             <div class="flex flex-col">
                 <div class="flex space-x-1 align-middle">
                     <label for="input_photo_id" class="w-24 font-medium text-sm leading-10">Photo</label>
-                    <input type="file" id="input_photo_id" accept="image/*"
+                    <input type="file" id="input_photo_id"
                         class="px-4 grow h-10 border-gray-300 border rounded-lg text-base" @change="handleFileChange">
                 </div>
 
@@ -127,7 +128,6 @@ const handleFileChange = (event) => {
                 </div>
                 <ErrorMessage class="ps-[6.5rem]" :errorMessage="storeError.fieldMessage('password')"></ErrorMessage>
             </div>
-
             <div class="pt-4 flex space-x-4 justify-end">
                 <button type="button" class="w-24 h-10 text-sm font-bold rounded-md 
                                             border border-transparent bg-gray-400 text-white 
