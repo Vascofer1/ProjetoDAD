@@ -15,6 +15,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/auth/refreshtoken', [AuthController::class, 'refreshToken']);
     Route::get('/users/me', [UserController::class , 'showMe']);
     Route::put('/users/{user}', [UserController::class, 'update']);//->can('update', 'user'); 
+    Route::post('/users/{user}', [UserController::class, 'updateUserPhoto']);
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->can('delete', 'user');
     Route::get('/users', [UserController::class, 'index'])->can('view', User::class);
     Route::get('/users/{user}', [UserController::class, 'show']);

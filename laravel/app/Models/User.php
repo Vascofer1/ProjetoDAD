@@ -22,7 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'nickname',
-        'photo_url',
+        'photo_filename',
         'type',
         'blocked',
         'brain_coins_balance',
