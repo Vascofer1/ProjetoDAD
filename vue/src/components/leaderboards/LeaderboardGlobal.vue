@@ -1,48 +1,23 @@
 <template>
     <div class="game-history">
 
-      <div>
-      <h2>Recordes Globais Single Player</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Board Size</th>
-            <th>Best Time</th>
-            <th>Best Time Holder</th>
-            <th>Minimum Turns</th>
-            <th>Minimum Turns Holder</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, index) in singlePlayer" :key="index">
-            <td>{{ item.boardSize }}</td>
-            <td>{{ item.bestTime }}</td>
-            <td>{{ item.bestTimePlayer }}</td>
-            <td>{{ item.minimumTurns }}</td>
-            <td>{{ item.minimumTurnsPlayer }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div v-if="singlePlayer.length">
+      <SinglePlayerLeaderboard
+        :data="singlePlayer"
+        :columns="singlePlayerColumns"
+      />
     </div>
+    <p v-else>No games found.</p>
 
 
-    <div>
-      <h2>Most Wins</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Total Victories</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, index) in multiPlayer" :key="index">
-            <td>{{ item.username }}</td>
-            <td>{{ item.totalVictories }}</td>
-          </tr>
-        </tbody>
-      </table>
+    
+    <div v-if="multiPlayer.length">
+      <MultiPlayerLeaderboard
+        :data="multiPlayer"
+        :columns="multiPlayerColumns"
+      />
     </div>
+    <p v-else>No multiplayer games found.</p>
 
 
     </div>
@@ -53,16 +28,31 @@
 <script>
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
-
+import SinglePlayerLeaderboard from './SinglePlayerLeaderboard.vue';
+import MultiPlayerLeaderboard from './MultiPlayerLeaderboard.vue';
 
 export default {
 
+  components: { SinglePlayerLeaderboard, MultiPlayerLeaderboard },
   setup(){
     //const authStore = useAuthStore();
 
     const dados = ref([]);
     const singlePlayer = ref([]);
+    const singlePlayerColumns = [
+      { label: 'Board Size', field: 'boardSize' },
+      { label: 'Best Time', field: 'bestTime' },
+      { label: 'Best Time Holder', field: 'bestTimePlayer' },
+      { label: 'Minimum Turns', field: 'minimumTurns' },
+      { label: 'Minimum Turns Holder', field: 'minimumTurnsPlayer' }
+    ];
+
+
     const multiPlayer = ref([]);
+    const multiPlayerColumns = [
+      { label: 'Username', field: 'username' },
+      { label: 'Total Victories', field: 'totalVictories' }
+    ];
 
     const fetchGames = async () => {
       try {
@@ -96,7 +86,7 @@ export default {
     });
 
     return {
-      singlePlayer, multiPlayer
+      singlePlayer, singlePlayerColumns, multiPlayer, multiPlayerColumns
     };
     }
     }

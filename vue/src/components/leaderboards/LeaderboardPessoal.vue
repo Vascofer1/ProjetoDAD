@@ -2,58 +2,53 @@
     <div class="personal-leaderboard">
       <h1>Personal Leaderboard</h1>
   
-      <!-- Single Player Section -->
+
+      <!-- Singleplayer-->
       <div v-if="singlePlayer.length">
-        <h2>Single Player Stats</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Board Size</th>
-              <th>Best Time</th>
-              <th>Minimum Turns</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(item, index) in singlePlayer" :key="index">
-              <td>{{ item.boardSize }}</td>
-              <td>{{ item.bestTime }}</td>
-              <td>{{ item.minTurns }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p v-else>No single-player data available.</p>
-  
-      <!-- Multiplayer Section -->
-      <div v-if="multiPlayer">
-        <h2>Multiplayer Stats</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Total Victories</th>
-              <th>Total Losses</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{{ multiPlayer.totalVictories }}</td>
-              <td>{{ multiPlayer.totalLosses }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p v-else>No multiplayer data available.</p>
+      <SinglePlayerLeaderboard
+        :data="singlePlayer"
+        :columns="singlePlayerColumns"
+      />
     </div>
+    <p v-else>No games found.</p>
+  
+    
+      <!-- Multiplayer Section -->
+    <div v-if="multiPlayer">
+      <MultiPlayerLeaderboard
+        :data="[multiPlayer]" 
+        :columns="multiPlayerColumns"
+      />
+    </div>
+    <p v-else>No multiplayer games found.</p>
+
+    </div>
+
+
+     
   </template>
   
   <script>
   import { ref, onMounted } from 'vue';
   import axios from 'axios';
+  import SinglePlayerLeaderboard from './SinglePlayerLeaderboard.vue';
+  import MultiPlayerLeaderboard from './MultiPlayerLeaderboard.vue';
   
   export default {
+    components: { SinglePlayerLeaderboard, MultiPlayerLeaderboard },
     setup() {
       const singlePlayer = ref([]);
+      const singlePlayerColumns = [
+      { label: 'Board Size', field: 'boardSize' },
+      { label: 'Best Time', field: 'bestTime' },
+      { label: 'Minimum Turns', field: 'minimumTurns' },
+    ];
+
       const multiPlayer = ref(null);
+      const multiPlayerColumns = [
+      { label: 'Total Victories', field: 'totalVictories' },
+      { label: 'Total Losses', field: 'totalLosses' }
+    ];
   
       const fetchPersonalLeaderboard = async () => {
         try {
@@ -66,7 +61,7 @@
           singlePlayer.value = data.single_player.map((item) => ({
             boardSize: `${item.board_cols}x${item.board_rows}`,
             bestTime: item.best_time,
-            minTurns: item.min_turns,
+            minimumTurns: item.min_turns,
           }));
   
           // Map multiplayer data
@@ -85,7 +80,9 @@
 
     return {
       singlePlayer,
+      singlePlayerColumns,
       multiPlayer,
+      multiPlayerColumns,
     };
   },
 };
