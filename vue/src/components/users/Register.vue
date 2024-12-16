@@ -15,8 +15,11 @@ const user = ref({
     name: '',
     nickname: '',
     email: '',
-    type: '',
+    type: 'P',
     photoFileName: '',
+    coins: 0,
+    blocked: 0,
+    deleted_at: null
 })
 
 const create = async (user) => {

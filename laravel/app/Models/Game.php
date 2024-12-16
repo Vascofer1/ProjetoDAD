@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class Game extends Model
 {
     use HasFactory;
+
+    protected $table = 'games';
     
     protected $fillable = [
         'id',
@@ -19,6 +22,7 @@ class Game extends Model
         'ended_at',
         'total_time',
         'board_id',
+        'total_turns_winner',
     ];
 
     public function boards()

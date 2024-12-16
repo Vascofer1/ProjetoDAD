@@ -30,6 +30,10 @@ class StoreUpdateUserRequest extends FormRequest
             'nickname' => 'required|string|max:50|unique:users,nickname,' . $userId,
             'photo_url' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'password' => $userId ? 'nullable|string|min:3|confirmed' : 'required|string|min:3|confirmed',
+            'type' => 'required|in:A,P',
+            'blocked' => 'required|integer:0,1',
+            'coins' => 'required|integer',
+            'deleted_at' => 'nullable|date',
             /*
             
             

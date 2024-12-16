@@ -1,5 +1,5 @@
 <script setup>
-import { useTemplateRef, provide } from 'vue'
+import { useTemplateRef, provide, onMounted, ref } from 'vue'
 import Toaster from './components/ui/toast/Toaster.vue';
 import { useAuthStore } from '@/stores/auth'
 import GlobalAlertDialog from '@/components/common/GlobalAlertDialog.vue'
@@ -19,6 +19,7 @@ const logout = () => {
     `Are you sure you want to log out? You can still access your account later with 
   your credentials.`)
 }
+
 </script>
 
 <template>
@@ -55,14 +56,35 @@ const logout = () => {
             active-class="text-blue-600 font-semibold">
             Login
           </RouterLink>
+          <RouterLink v-show="storeAuth.user" :to="{ name: 'users' }" v-if="storeAuth.user && storeAuth.user.type == 'A'"
+            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-blue-600 font-semibold">
+            Users
+          </RouterLink>
           <button v-show="storeAuth.user" @click="logout" class="w-24 h-10 leading-10 text-center rounded-t-xl 
               border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500">
             Logout
           </button>
-          <RouterLink v-show="storeAuth.user" :to="{ name: 'remove account' }"
+          <RouterLink v-show="storeAuth.userType == 'P'" :to="{ name: 'remove account' }"
             class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             active-class="text-blue-600 font-semibold">
             Remove Account
+          </RouterLink>
+          <b v-show="storeAuth.userType == 'P'" class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">brain coins: {{ storeAuth.userCoins }}</b>
+          <RouterLink v-show="storeAuth.userType == 'P'" :to="{ name: 'create transaction' }"
+            class="flex justify-between text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-blue-600 font-semibold">
+            Buy Coins
+          </RouterLink>
+          <RouterLink v-show="storeAuth.user" :to="{ name: 'transactions' }"
+            class="flex justify-between text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-blue-600 font-semibold">
+            Transaction History
+          </RouterLink>
+          <RouterLink v-show="storeAuth.userType == 'P'" to="/dashboard"
+            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-blue-600 font-semibold">
+            Dashboard
           </RouterLink>
         </nav>
       </div>
