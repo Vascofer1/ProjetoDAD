@@ -36,7 +36,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/user/singleplayer', [HistoryController::class, 'singlePlayerHistory']);
     Route::get('/user/multiplayer', [HistoryController::class, 'multiPlayerHistory']);
-    Route::get('/user/all', [HistoryController::class, 'allGames']);
+    Route::get('/historico/all', [HistoryController::class, 'allGames'])->can('view', User::class); 
 
     Route::get('/leaderboard/personal', [LeaderBoardController::class, 'personalLeaderboard']);
    });
