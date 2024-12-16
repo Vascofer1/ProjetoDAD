@@ -4,6 +4,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TransactionController;
 use App\Models\User;
+use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\LeaderBoardController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GameController;
@@ -32,8 +35,18 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/games', [GameController::class, 'store'])->can('access', Game::class);
     Route::put('/games/{gameId}/{boardId}', [GameController::class, 'update'])->can('access', Game::class);
 
+
+    Route::get('/user/singleplayer', [HistoryController::class, 'singlePlayerHistory']);
+    Route::get('/user/multiplayer', [HistoryController::class, 'multiPlayerHistory']);
+    Route::get('/historico/all', [HistoryController::class, 'allGames'])->can('view', User::class); 
+
+    Route::get('/leaderboard/personal', [LeaderBoardController::class, 'personalLeaderboard']);
    });
 
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']);
+Route::get('/leaderboard/global', [LeaderBoardController::class, 'globalLeaderboard']);
+
+
+
 

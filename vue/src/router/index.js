@@ -20,6 +20,13 @@ import Game3x4 from '../components/games/Game3x4.vue';
 import Game4x4 from '../components/games/Game4x4.vue';
 import Game6x6 from '../components/games/Game6x6.vue';
 import MemoryBoard from '@/components/MemoryBoard.vue';
+import MultiPlayerHistory from '@/components/historico/MultiPlayerHistory.vue'
+import SinglePlayerHistory from '@/components/historico/SinglePlayerHistory.vue'
+import LeaderboardGlobal from '@/components/leaderboards/LeaderboardGlobal.vue'
+import LeaderboardPessoal from '@/components/leaderboards/LeaderboardPessoal.vue'
+import AllGamesHistory from '@/components/historico/AllGamesHistory.vue'
+import Leaderboards from '@/components/Leaderboards.vue'
+import GameHistory from '@/components/GameHistory.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,7 +46,8 @@ const router = createRouter({
         {
           path: 'websocket',
           component: WebSocketTester
-        }
+        },
+        
       ]
     },
     {
@@ -110,9 +118,44 @@ const router = createRouter({
       name: 'game6x6',
       component: Game6x6,
       props: true, // Isso permite que o Vue Router passe os parâmetros como props para o componente
-    }
-    
-    
+    },
+    {
+      path: '/historico/',
+      name: 'gameHistory',
+      component: GameHistory,
+    },
+    {
+      path: '/historico/singleplayer',
+      name: 'singleplayerHistory',
+      component: SinglePlayerHistory,
+    },
+    {
+      path: '/historico/multiplayer',
+      name: 'MultiplayerHistory',
+      component: MultiPlayerHistory
+    },
+    {
+      path: '/historico/all',
+      name: 'AllGamesHistory',
+      component: AllGamesHistory
+    },
+    {
+      path: "/leaderboards",
+      name: "leaderboards",
+      component: Leaderboards,
+    },
+    {
+      path: '/leaderboard/global',
+      name: 'leaderboardGlobal',
+      component: LeaderboardGlobal
+    },
+    {
+      path: '/leaderboard/personal',
+      name: 'leaderboardPersonal',
+      component: LeaderboardPessoal
+    },
+
+
   ]
 });
 
