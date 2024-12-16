@@ -10,6 +10,7 @@ use App\Http\Controllers\LeaderBoardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GameController;
+use App\Models\Game;
 
 Route::get('/users/lol', [AuthController::class , 'lol']);
 Route::get('/transactions/lol', [TransactionController::class , 'lol']);
@@ -18,6 +19,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/auth/refreshtoken', [AuthController::class, 'refreshToken']);
     Route::get('/users/me', [UserController::class , 'showMe']);
     Route::put('/users/{user}', [UserController::class, 'update']);//->can('update', 'user'); 
+    Route::post('/users/{user}', [UserController::class, 'updateUserPhoto']);
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->can('delete', 'user');
     Route::get('/users', [UserController::class, 'index'])->can('view', User::class);
     Route::get('/users/{user}', [UserController::class, 'show']);

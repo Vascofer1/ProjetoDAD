@@ -28,64 +28,41 @@ const logout = () => {
   <div class="min-h-screen bg-gray-50">
     <header class="bg-white shadow-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <nav class="flex items-center justify-start h-16 space-x-8">
-          <RouterLink to="/"
-            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-blue-600 font-semibold">
-            Home
-          </RouterLink>
-          <RouterLink to="/testers/laravel"
-            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-blue-600 font-semibold">
-            Laravel Tester
-          </RouterLink>
-          <RouterLink to="/testers/websocket"
-            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-blue-600 font-semibold">
-            WebSockets Tester
-          </RouterLink>
-          <RouterLink v-show="storeAuth.user" :to="{ name: 'profile' }"
-            class="flex justify-between text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-blue-600 font-semibold">
-            {{ storeAuth.userFirstLastName ? storeAuth.userFirstLastName : ' ' }}
-            <img v-if="storeAuth.user" class="w-14 h-14 rounded-full" :src="storeAuth.userPhotoUrl"
-              alt="Rounded avatar">
-          </RouterLink>
-          <RouterLink v-show="!storeAuth.user" :to="{ name: 'login' }"
-            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-blue-600 font-semibold">
-            Login
-          </RouterLink>
-          <RouterLink v-show="storeAuth.user" :to="{ name: 'users' }" v-if="storeAuth.user && storeAuth.user.type == 'A'"
-            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-blue-600 font-semibold">
-            Users
-          </RouterLink>
-          <button v-show="storeAuth.user" @click="logout" class="w-24 h-10 leading-10 text-center rounded-t-xl 
-              border-none  text-white select-none bg-gray-400 cursor-pointer hover:bg-gray-500">
-            Logout
-          </button>
-          <RouterLink v-show="storeAuth.userType == 'P'" :to="{ name: 'remove account' }"
-            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-blue-600 font-semibold">
-            Remove Account
-          </RouterLink>
-          <b v-show="storeAuth.userType == 'P'" class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">brain coins: {{ storeAuth.userCoins }}</b>
-          <RouterLink v-show="storeAuth.userType == 'P'" :to="{ name: 'create transaction' }"
-            class="flex justify-between text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-blue-600 font-semibold">
-            Buy Coins
-          </RouterLink>
-          <RouterLink v-show="storeAuth.user" :to="{ name: 'transactions' }"
-            class="flex justify-between text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-blue-600 font-semibold">
-            Transaction History
-          </RouterLink>
-          <RouterLink v-show="storeAuth.userType == 'P'" to="/dashboard"
-            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-blue-600 font-semibold">
-            Dashboard
-          </RouterLink>
+        <nav class="flex items-center justify-between h-16">
+          <!-- Coluna Esquerda + Meio unidas -->
+          <div class="flex items-center space-x-8">
+            <!-- Páginas Comuns -->
+            <!--<RouterLink to="/" class="nav-link">Home</RouterLink>-->
+            <RouterLink
+              v-show="storeAuth.user"
+              :to="{ name: 'transactions' }"
+              class="nav-link"
+            >
+              Transaction History
+            </RouterLink>
+
+            <!-- Admin Links -->
+            <RouterLink
+              v-show="storeAuth.user && storeAuth.user.type === 'A'"
+              :to="{ name: 'users' }"
+              class="nav-link"
+            >
+              Users
+            </RouterLink>
+
+            <!-- Player Links -->
+            <template v-if="storeAuth.userType === 'P'">
+              <b class="text-sm font-medium text-gray-700 whitespace-nowrap">
+                Brain coins: {{ storeAuth.userCoins }}
+              </b>
+              <RouterLink :to="{ name: 'create transaction' }" class="nav-link">
+                Buy Coins
+              </RouterLink>
+              <RouterLink to="/dashboard" class="nav-link">Dashboard</RouterLink>
+            </template>
+          </div>
+
+          <!-- Leaderboards + Historico -->
           <RouterLink v-show="storeAuth.user" to="/leaderboards"
             class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             active-class="text-blue-600 font-semibold">
@@ -96,18 +73,64 @@ const logout = () => {
             active-class="text-blue-600 font-semibold">
             Leaderboards Globais
           </RouterLink>
+
           <RouterLink v-show="storeAuth.user" to="/historico"
             class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             active-class="text-blue-600 font-semibold">
             Game History
           </RouterLink>
 
+          <!-- Perfil + Logout (direita) -->
+          <div class="flex items-center space-x-6">
+            <RouterLink
+              v-show="storeAuth.user"
+              :to="{ name: 'profile' }"
+              class="nav-link flex items-center space-x-2"
+            >
+              <span>{{ storeAuth.userFirstLastName || ' ' }}</span>
+              <img
+                v-if="storeAuth.userPhotoUrl"
+                class="w-10 h-10 rounded-full"
+                :src="storeAuth.userPhotoUrl"
+                alt="User avatar"
+              />
+            </RouterLink>
+            <RouterLink v-show="storeAuth.userType == 'P'" :to="{ name: 'remove account' }"
+            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-blue-600 font-semibold">
+            Remove Account
+          </RouterLink>
+            <button
+              v-show="storeAuth.user"
+              @click="logout"
+              class="logout-btn"
+            >
+              Logout
+            </button>
+            <RouterLink
+              v-show="!storeAuth.user"
+              :to="{ name: 'login' }"
+              class="nav-link"
+            >
+              Login
+            </RouterLink>
+          </div>
+
         </nav>
       </div>
     </header>
-
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <RouterView />
     </main>
   </div>
 </template>
+
+<style scoped>
+.nav-link {
+  @apply text-gray-700 hover:text-blue-500 transition-colors font-medium text-sm px-3 py-2 rounded-md;
+}
+
+.logout-btn {
+  @apply bg-gray-200 text-gray-700 hover:bg-gray-300 text-sm font-medium px-5 py-2 rounded-md transition-all;
+}
+</style>

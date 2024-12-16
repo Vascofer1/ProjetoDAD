@@ -1,6 +1,6 @@
 <template>
   <div class="history">
-    <h1>Leaderboards</h1>
+    <h1>Game History</h1>
     <div>
       <button @click="goToSingleplayerHistory">Historico singleplayer</button>
       <button @click="goToMultiplayerHistory">Historico multiplayer</button>

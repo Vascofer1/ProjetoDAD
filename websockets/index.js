@@ -18,7 +18,6 @@ io.on("connection", (socket) => {
 
   socket.on("echo", (message) => {
     const payload= { message, user:null };
-    socket.emit("echo", message);
+    socket.emit("echo", payload);
   });
-  io.sockets.emit('echo', payload);
 });

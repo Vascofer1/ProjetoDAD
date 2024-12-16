@@ -50,7 +50,7 @@ export const useAuthStore = defineStore('auth', () => {
   const userPhotoUrl = computed(() => {
     const photoFile = user.value ? (user.value.photoFileName ?? '') : ''
     if (photoFile) {
-      return axios.defaults.baseURL.replaceAll('/api', photoFile)
+      return axios.defaults.baseURL.replaceAll('/api', '/storage/photos/' + photoFile)
     }
     return avatarNoneAssetURL
   })
@@ -63,45 +63,45 @@ export const useAuthStore = defineStore('auth', () => {
   const filterByType = ref(null)
   const filterByBlocked = ref(null)
   const filterByNickname = ref(null)
-    
-    const totalUsers = computed(() => {
-        return users.value ? users.value.length : 0
-    })
 
-    const totalFilteredUsers = computed(() => {
-        return filteredUsers.value ? filteredUsers.value.length : 0
-    })
-    
-    // This function is "private" - not exported by the store
-    const userInFilter = (user) => {
-      if (filterByType.value !== null && user.type !== filterByType.value) {
-          return false
-      }
-      if (filterByBlocked.value !== null && user.blocked !== filterByBlocked.value) {
-          return false
-      }
-      if (filterByNickname.value !== null && !user.nickname.toLowerCase().includes(filterByNickname.value.toLowerCase())) {
-          return false
-      }
-      return true
+  const totalUsers = computed(() => {
+    return users.value ? users.value.length : 0
+  })
+
+  const totalFilteredUsers = computed(() => {
+    return filteredUsers.value ? filteredUsers.value.length : 0
+  })
+
+  // This function is "private" - not exported by the store
+  const userInFilter = (user) => {
+    if (filterByType.value !== null && user.type !== filterByType.value) {
+      return false
+    }
+    if (filterByBlocked.value !== null && user.blocked !== filterByBlocked.value) {
+      return false
+    }
+    if (filterByNickname.value !== null && !user.nickname.toLowerCase().includes(filterByNickname.value.toLowerCase())) {
+      return false
+    }
+    return true
   }
 
-    const filteredUsers = computed(() => users.value.filter(userInFilter))
+  const filteredUsers = computed(() => users.value.filter(userInFilter))
 
-    const filterDescription = computed(() => {
-        let description = 'All users'
-        if (filterByType.value) {
-            description += ' of type ' + filterByType.value
-        }
-        if (filterByBlocked.value) {
-            description += ' and blocked'
-        }
-        if (filterByNickname.value) {
-            description += ' with nickname containing ' + filterByNickname.value
-        }
-        return description
-    })
-    
+  const filterDescription = computed(() => {
+    let description = 'All users'
+    if (filterByType.value) {
+      description += ' of type ' + filterByType.value
+    }
+    if (filterByBlocked.value) {
+      description += ' and blocked'
+    }
+    if (filterByNickname.value) {
+      description += ' with nickname containing ' + filterByNickname.value
+    }
+    return description
+  })
+
 
   // This function is "private" - not exported by the store
   const clearUser = () => {
@@ -140,25 +140,25 @@ export const useAuthStore = defineStore('auth', () => {
     storeError.resetMessages()
     const response = await axios.get('users')
     users.value = response.data.data
-}
+  }
 
 
-const fetchUser = async (userId) => {
-  storeError.resetMessages()
-  const response = await axios.get('users/' + usertId)
-  const index = getIndexOfUser(userId)
-  if (index > -1) {
+  const fetchUser = async (userId) => {
+    storeError.resetMessages()
+    const response = await axios.get('users/' + usertId)
+    const index = getIndexOfUser(userId)
+    if (index > -1) {
       // Instead of a direct assignment, object is cloned/copied to the array
       // This ensures that the object in the array is not the same as the object fetched
-      users.value[index] = Object.assign({}, response.data.data)  
-      
-  }
-  return response.data.data
-}
+      users.value[index] = Object.assign({}, response.data.data)
 
-const getIndexOfUser = (userId) => {
-  return users.value.findIndex((p) => p.id === userId)
-}
+    }
+    return response.data.data
+  }
+
+  const getIndexOfUser = (userId) => {
+    return users.value.findIndex((p) => p.id === userId)
+  }
 
   const logout = async () => {
     storeError.resetMessages()
@@ -239,23 +239,28 @@ const getIndexOfUser = (userId) => {
   const updateUser = async (user) => {
     storeError.resetMessages()
     try {
-      const response = await axios.put('users/' + user.id, user)
+
+      console.log(user.photo_url)
+      // Verifique se o campo photo_url é um arquivo e adicione ao FormData
+      if (user.photo_url instanceof File) {
+        updateUserPhoto(user.photo_url, user.id)
+      }
+
+      user.photo_url = null
+      // Enviar a requisição PUT com os dados do user
+      const response = await axios.put(`users/${user.id}`, user);
+      //const response = await axios.put('users/' + user.id, user)
       console.log(user.photoFileName, user)
       //const index = getIndexOfUser(user.id)
       const index = user.id
       if (index > -1) {
-        console.log(index, "lol")
         // Instead of a direct assignment, object is cloned/copied to the array
         // This ensures that the object in the array is not the same as the object fetched
-        console.log(Object.assign({}, response.data.data))
         users.value[index] = Object.assign({}, response.data.data)
-        console.log(index, "lol")
       }
-      console.log(index, "lol")
       toast({
         description: 'User has been updated correctly!',
       })
-      console.log(index, "lol")
       console.log("alo", response.data.data)
       return response.data.data
     } catch (e) {
@@ -263,6 +268,30 @@ const getIndexOfUser = (userId) => {
       return false
     }
   }
+
+
+  const updateUserPhoto = async (photo, user_id) => {
+    storeError.resetMessages()
+    try {
+      // Criando o FormData
+      const formData = new FormData();
+
+      formData.append('photo_url', photo); // Adicionando o arquivo de imagem
+
+      const response = await axios.post(`users/${user_id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log("boas", response.data.data)
+      return response.data.data
+    } catch (e) {
+      console.log("nao boas", response.data.data)
+      storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error updating user!')
+      return false
+    }
+  }
+
 
   const canUpdateDeleteUser = (targetUser) => {
     return (user.value.type === 'A' && user.value.id !== targetUser.id)
@@ -284,38 +313,38 @@ const getIndexOfUser = (userId) => {
     }
   }
 
-const blockUser = async (user) => {
-  storeError.resetMessages()
-  try {
+  const blockUser = async (user) => {
+    storeError.resetMessages()
+    try {
       console.log(user)
       await axios.patch('users/' + user.id + '/block')
       const index = getIndexOfUser(user.id)
       if (index > -1) {
-          users.value[index].blocked = !users.value[index].blocked
+        users.value[index].blocked = !users.value[index].blocked
       }
       return true
-  } catch (e) {
+    } catch (e) {
       storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error blocking user!')
       return false
+    }
   }
-}
 
 
 
-const insertAdmin = async (admin) => {
-  storeError.resetMessages()
-  try {
+  const insertAdmin = async (admin) => {
+    storeError.resetMessages()
+    try {
       const response = await axios.post('admin', admin)
       users.value.push(response.data.data)
       toast({
-          description: `Admin #${response.data.data.id} was created!`,
+        description: `Admin #${response.data.data.id} was created!`,
       })
       return response.data.data
-  } catch (e) {
+    } catch (e) {
       storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error inserting admin!')
       return false
+    }
   }
-}
 
 
   const getUser = async (user) => {
