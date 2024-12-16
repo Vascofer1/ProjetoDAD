@@ -14,7 +14,6 @@ const props = defineProps({
         default: 'User'
     },
     type: {
-    type: {
         type: String
     }
 })
