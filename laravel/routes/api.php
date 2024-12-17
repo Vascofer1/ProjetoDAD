@@ -49,6 +49,9 @@ Route::get('/leaderboard/global', [LeaderBoardController::class, 'globalLeaderbo
 //photo
 Route::post('/users/{user}', [UserController::class, 'updateUserPhoto']);
 
+//transactions
+Route::post('/transactions/B', [TransactionController::class , 'storeTypeB']);
+
 
 
 

@@ -70,7 +70,6 @@ export const useTransactionStore = defineStore('transaction', () => {
         storeError.resetMessages()
 
         try {
-            console.log(transaction, "oi", transaction.euros)
             const payment = {
                 type: transaction.payment_type,
                 reference: transaction.payment_reference,
@@ -87,7 +86,6 @@ export const useTransactionStore = defineStore('transaction', () => {
 
 
             const response = await axios.post('transactions', transaction)
-            console.log("deu!")
             transactions.value.push(response.data.data)
             console.log(response.data.data)
             toast({
@@ -112,25 +110,12 @@ export const useTransactionStore = defineStore('transaction', () => {
     }
 
 
-    const insertTransactionTypeI = async (transaction) => {
+    const insertTransactionTypeB = async (transaction) => {
         storeError.resetMessages()
-        try {
-            const response = await axios.post('transactions', transaction)
+        try {console.log(transaction)
+            const response = await axios.post('transactions/B', transaction)
+            console.log("deu!")
             transactions.value.push(response.data.data)
-            toast({
-                description: `Transaction #${response.data.data.id} was created!`,
-                action: h(ToastAction, {
-                    altText: `Open new transaction`,
-                    onclick: () => {
-                        router.push({
-                            name: 'showTransaction',
-                            params: { id: response.data.data.id }
-                        })
-                    }
-                }, {
-                    default: () => `Open new transaction`,
-                })
-            })
             console.log(transaction, "ola")
             return response.data.data
         } catch (e) {
@@ -146,6 +131,6 @@ export const useTransactionStore = defineStore('transaction', () => {
         fetchTransactions,
         fetchTransaction,
         insertTransactionPurchase,
-        insertTransactionTypeI
+        insertTransactionTypeB
     }
 })

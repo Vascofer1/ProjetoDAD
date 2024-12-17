@@ -6,12 +6,14 @@ import { useRouter } from 'vue-router'
 import { useToast } from '@/components/ui/toast/use-toast'
 import { ToastAction } from '@/components/ui/toast'
 import { h } from 'vue'
+import { useTransactionStore } from '@/stores/transaction'
 
 import avatarNoneAssetURL from '@/assets/avatar-none.png'
 import { get } from '@vueuse/core'
 
 export const useAuthStore = defineStore('auth', () => {
   const storeError = useErrorStore()
+  const storeTransaction = useTransactionStore()
 
   const { toast } = useToast()
   const users = ref([])
@@ -393,12 +395,21 @@ export const useAuthStore = defineStore('auth', () => {
           default: () => `Login`,
         })
       })
-      console.log(user, "ola")
-
       // Verifique se o campo photo_url é um arquivo e adicione ao FormData
       if (photo instanceof File) {
         updateUserPhoto(photo, response.data.data.id)
       }
+
+      
+      const transaction = ref({
+        brain_coins: 10,
+        type: 'B',
+        user_id: response.data.data.id,
+        transaction_datetime: null,
+        game_id: null
+      })
+      console.log(response.data.data.id, transaction)
+      await storeTransaction.insertTransactionTypeB(transaction.value)
 
       return response.data.data
     } catch (e) {

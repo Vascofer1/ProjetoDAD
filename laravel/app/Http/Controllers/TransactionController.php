@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\TransactionResource;
 use App\Models\Transaction;
+use App\Models\User;
 use App\Http\Requests\TransactionRequest;
 use Illuminate\Support\Facades\DB;
 
@@ -33,6 +34,7 @@ class TransactionController extends Controller
 
     public function store(TransactionRequest $request)
     {
+       
         $user = $request->user();
         if (!$user) {
             return response()->json(['error' => 'User not authenticated'], 401);
@@ -46,6 +48,34 @@ class TransactionController extends Controller
             $transaction->brain_coins = $request->input('euros') * 10;
         }
         
+        $transaction->transaction_datetime = now(); // ou date('Y-m-d H:i:s')
+
+        $transaction->save();
+
+        $user->brain_coins_balance = ($user->brain_coins_balance ?? 0) + $transaction->brain_coins;
+        $user->save();
+
+        return new TransactionResource($transaction);
+    }
+
+
+    public function storeTypeB(TransactionRequest $request)
+    {
+        $userId = $request->input('user_id');
+
+        if (!$userId) {
+            return response()->json(['error' => 'User ID is required'], 400);
+        }
+
+        $transaction = new Transaction();
+        $transaction->fill($request->validated());
+
+        $user = User::find($userId);
+        if (!$user) {
+            return response()->json(['error' => 'User not found for the given transaction'], 404);
+        }
+        
+        $transaction->user_id = $user->id;
         $transaction->transaction_datetime = now(); // ou date('Y-m-d H:i:s')
 
         $transaction->save();
