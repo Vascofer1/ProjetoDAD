@@ -399,7 +399,6 @@ export const useAuthStore = defineStore('auth', () => {
       if (photo instanceof File) {
         updateUserPhoto(photo, response.data.data.id)
       }
-
       
       const transaction = ref({
         brain_coins: 10,
@@ -408,7 +407,7 @@ export const useAuthStore = defineStore('auth', () => {
         transaction_datetime: null,
         game_id: null
       })
-      console.log(response.data.data.id, transaction)
+      
       await storeTransaction.insertTransactionTypeB(transaction.value)
 
       return response.data.data

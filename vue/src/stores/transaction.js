@@ -112,11 +112,9 @@ export const useTransactionStore = defineStore('transaction', () => {
 
     const insertTransactionTypeB = async (transaction) => {
         storeError.resetMessages()
-        try {console.log(transaction)
+        try {
             const response = await axios.post('transactions/B', transaction)
-            console.log("deu!")
             transactions.value.push(response.data.data)
-            console.log(transaction, "ola")
             return response.data.data
         } catch (e) {
             storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error creating transaction!')
