@@ -35,11 +35,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/games/{gameId}/{boardId}', [GameController::class, 'update'])->can('access', Game::class);
 
 
-    Route::get('/user/singleplayer', [HistoryController::class, 'singlePlayerHistory']);
-    Route::get('/user/multiplayer', [HistoryController::class, 'multiPlayerHistory']);
+    Route::get('/user/singleplayer', [HistoryController::class, 'singlePlayerHistory'])->can('notAdmin', User::class); 
+    Route::get('/user/multiplayer', [HistoryController::class, 'multiPlayerHistory'])->can('notAdmin', User::class); 
     Route::get('/historico/all', [HistoryController::class, 'allGames'])->can('view', User::class); 
 
-    Route::get('/leaderboard/personal', [LeaderBoardController::class, 'personalLeaderboard']);
+    Route::get('/leaderboard/personal', [LeaderBoardController::class, 'personalLeaderboard'])->can('notAdmin', User::class); 
    });
 
 Route::post('/auth/login', [AuthController::class, 'login']);

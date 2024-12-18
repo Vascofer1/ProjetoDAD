@@ -63,22 +63,28 @@ const logout = () => {
           </div>
 
           <!-- Leaderboards + Historico -->
-          <RouterLink v-show="storeAuth.user" to="/leaderboards"
+          <RouterLink v-if="storeAuth.userType == 'P'" to="/leaderboards"
             class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             active-class="text-blue-600 font-semibold">
             Leaderboards
           </RouterLink>
-          <RouterLink v-show="!storeAuth.user" to="/leaderboard/global"
+          <RouterLink v-if="!(storeAuth.userType == 'P')" to="/leaderboard/global"
             class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             active-class="text-blue-600 font-semibold">
             Leaderboards Globais
           </RouterLink>
 
-          <RouterLink v-show="storeAuth.user" to="/historico"
+          <RouterLink v-if="storeAuth.userType == 'P'" to="/historico"
             class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             active-class="text-blue-600 font-semibold">
             Game History
           </RouterLink>
+          <RouterLink v-if="storeAuth.userType == 'A'" to="/historico/all"
+            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-blue-600 font-semibold">
+            All Games History
+          </RouterLink>
+
 
           <!-- Perfil + Logout (direita) -->
           <div class="flex items-center space-x-6">

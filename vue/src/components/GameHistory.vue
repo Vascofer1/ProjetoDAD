@@ -4,21 +4,12 @@
     <div>
       <button @click="goToSingleplayerHistory">Historico singleplayer</button>
       <button @click="goToMultiplayerHistory">Historico multiplayer</button>
-      <button v-show="userType === 'A'" @click="goToAllGamesHistory">Historico Todos os Jogos</button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { useAuthStore } from '@/stores/auth'
 import router from '@/router';
-
-    const authStore = useAuthStore(); // Access the auth store
-    const userType = authStore.userType; // Get the userType (e.g., "A" for admin)
-
-    const goToAllGamesHistory = () => {
-      router.push("/historico/all");
-    };
 
     const goToSingleplayerHistory = () => {
       router.push("/historico/singleplayer");

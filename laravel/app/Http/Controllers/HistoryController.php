@@ -68,7 +68,7 @@ class HistoryController extends Controller
                 'games.type'
             )
             ->orderBy('games.id')
-            ->paginate(20);
+            ->paginate(100);
 
 
             return response()->json($games);
