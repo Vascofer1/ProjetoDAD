@@ -1,20 +1,17 @@
 import { useAuthStore } from '@/stores/auth'
 
-
-
 export default function authGuard(to, from, next) {
-    // Assume user roles/permissions are stored in a Vuex store or a similar global state
 
-    const authStore = useAuthStore(); // Access the auth store
-const userType = authStore.userType; // Get the userType (e.g., "A" for admin)
+    const authStore = useAuthStore();
+    const userType = authStore.userType; 
 
-    const userRole = userType; // e.g., 'admin', 'user', etc.
-    const allowedRoles = to.meta.allowedRoles; // Defined in the route metadata
+    const userRole = userType; 
+    const allowedRoles = to.meta.allowedRoles; // Buscar dados ao campo meta: nas routes
 
     if (allowedRoles && !allowedRoles.includes(userRole)) {
-        // If the user role is not allowed, redirect or show an error
-        next({ name: 'home' }); // Redirect to a "403 Forbidden" page
+        // Route se nao tiver permissoes
+        next({ name: 'home' }); 
     } else {
-        next(); // Allow access
+        next(); 
     }
 }
