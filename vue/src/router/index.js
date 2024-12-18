@@ -27,6 +27,7 @@ import LeaderboardPessoal from '@/components/leaderboards/LeaderboardPessoal.vue
 import AllGamesHistory from '@/components/historico/AllGamesHistory.vue'
 import Leaderboards from '@/components/Leaderboards.vue'
 import GameHistory from '@/components/GameHistory.vue'
+import authGuard from '@/stores/authGuard'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -123,26 +124,36 @@ const router = createRouter({
       path: '/historico/',
       name: 'gameHistory',
       component: GameHistory,
+      meta: {allowedRoles: ['P']},
+      beforeEnter: authGuard
     },
     {
       path: '/historico/singleplayer',
       name: 'singleplayerHistory',
       component: SinglePlayerHistory,
+      meta: {allowedRoles: ['P']},
+      beforeEnter: authGuard
     },
     {
       path: '/historico/multiplayer',
       name: 'MultiplayerHistory',
-      component: MultiPlayerHistory
+      component: MultiPlayerHistory,
+      meta: {allowedRoles: ['P']},
+      beforeEnter: authGuard
     },
     {
       path: '/historico/all',
       name: 'AllGamesHistory',
-      component: AllGamesHistory
+      component: AllGamesHistory,
+      meta: {allowedRoles: ['A']},
+      beforeEnter: authGuard
     },
     {
       path: "/leaderboards",
       name: "leaderboards",
       component: Leaderboards,
+      meta: {allowedRoles: ['P']},
+      beforeEnter: authGuard
     },
     {
       path: '/leaderboard/global',
@@ -152,7 +163,9 @@ const router = createRouter({
     {
       path: '/leaderboard/personal',
       name: 'leaderboardPersonal',
-      component: LeaderboardPessoal
+      component: LeaderboardPessoal,
+      meta: {allowedRoles: ['P']},
+      beforeEnter: authGuard
     },
 
 
