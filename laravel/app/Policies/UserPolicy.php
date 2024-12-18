@@ -31,6 +31,15 @@ class UserPolicy
         }
         return null;
     } 
+
+    public function notAdmin(User $user): bool 
+    { 
+        if (!($user->type == 'A')) {
+            return true;
+        }
+        return null; 
+    }
+    
  
     public function create(User $user): bool 
     { 
