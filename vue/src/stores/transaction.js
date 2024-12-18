@@ -15,20 +15,95 @@ export const useTransactionStore = defineStore('transaction', () => {
 
     const { toast } = useToast()
     const transactions = ref([])
+    const totalTransactions = ref(0)
     const transaction = ref(null)
+    const currentPage = ref(1) // Página atual
+    const totalPages = ref(1) // Total de páginas disponíveis
+    const pagination = ref({}) // Detalhes da paginação
 
     const router = useRouter()
 
 
-    const totalTransactions = computed(() => {
-        return transactions.value ? transactions.value.length : 0
+    //#region filters
+
+    const filterByType = ref(null)
+    const filterById = ref(null)
+    const filterByDateAfter = ref(null)
+    const filterByDateBefore = ref(null)
+
+    const totalFilteredTransactions = computed(() => {
+        return filteredTransactions.value ? filteredTransactions.value.length : 0
     })
 
-    const fetchTransactions = async () => {
-        storeError.resetMessages()
-        const response = await axios.get('transactions')
-        transactions.value = response.data.data
+    // This function is "private" - not exported by the store
+    const transactionInFilter = (transaction) => {
+        if (filterByType.value !== null && transaction.type !== filterByType.value) {
+            return false
+        }
+        if (filterById.value !== null && transaction.id !== filterById.value) {
+            return false
+        }
+        if (filterByDateAfter.value !== null && transaction.transaction_datetime < filterByDateAfter.value) {
+            return false
+        }
+        if (filterByDateBefore.value !== null && transaction.transaction_datetime > filterByDateBefore.value) {
+            return false
+        }
+        return true
     }
+
+    const filteredTransactions = computed(() => transactions.value.filter(transactionInFilter))
+
+    const filterDescription = computed(() => {
+        let description = 'All transactions'
+        if (filterByType.value) {
+            description += ' of type ' + filterByType.value
+        }
+        if (filterById.value) {
+            description += ' with id' + filterById.value
+        }
+        if (filterByNickname.value) {
+            description += ' with nickname containing ' + filterByNickname.value
+        }
+        if (filterByDateAfter.value) {
+            description += ' after ' + filterByDateAfter.value
+        }
+        if (filterByDateBefore.value) {
+            description += ' before ' + filterByDateBefore.value
+        }
+        return description
+    })
+
+
+    //#endregion
+
+
+    /*const totalTransactions = computed(() => {
+        return transactions.value ? transactions.value.length : 0
+    })*/
+
+    const fetchTransactions = async (page) => {
+        storeError.resetMessages()
+    
+        const params = {
+            page: page,
+            type: filterByType.value,
+            id: filterById.value,
+            date_after: filterByDateAfter.value,
+            date_before: filterByDateBefore.value,
+        }
+    
+        try {
+            const response = await axios.get('transactions', { params })
+            transactions.value = response.data.data
+            currentPage.value = page
+            totalPages.value = response.data.meta.last_page
+            totalTransactions.value = response.data.meta.total
+        } catch (error) {
+            storeError.setErrorMessages('Error fetching transactions!', error.response?.data?.errors || {}, error.response?.status)
+        }
+    }
+    
 
     // This function is "private" - not exported by the store
     const getIndexOfTransaction = (transactionId) => {
@@ -42,7 +117,7 @@ export const useTransactionStore = defineStore('transaction', () => {
         if (index > -1) {
             // Instead of a direct assignment, object is cloned/copied to the array
             // This ensures that the object in the array is not the same as the object fetched
-            transactions.value[index] = Object.assign({}, response.data.data)  
+            transactions.value[index] = Object.assign({}, response.data.data)
         }
         return response.data.data
     }
@@ -129,6 +204,16 @@ export const useTransactionStore = defineStore('transaction', () => {
         fetchTransactions,
         fetchTransaction,
         insertTransactionPurchase,
-        insertTransactionTypeB
+        insertTransactionTypeB,
+        filterByType,
+        filterById,
+        filterByDateAfter,
+        filterByDateBefore,
+        totalFilteredTransactions,
+        filterDescription,
+        filteredTransactions,
+        currentPage,
+        totalPages,
+        pagination
     }
 })
