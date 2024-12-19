@@ -21,6 +21,7 @@ import Game4x4 from '../components/games/Game4x4.vue';
 import Game6x6 from '../components/games/Game6x6.vue';
 import MemoryBoard from '@/components/MemoryBoard.vue';
 import GamePersonalizado from '@/components/games/GamePersonalizado.vue'
+import MultiPlayerGames from '@/components/multiPlayer/MultiPlayerGames.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -117,7 +118,14 @@ const router = createRouter({
       name: 'gamePersonalizado',
       component: GamePersonalizado,
       props: true, 
+    },
+    {
+      path: '/multiplayer',
+      name: 'multiplayer',
+      component: MultiPlayerGames,
+      props: true, 
     }
+    
     
     
   ]

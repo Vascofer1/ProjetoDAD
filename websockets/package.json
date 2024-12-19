@@ -9,7 +9,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "To install dependencies:",
   "dependencies": {
     "socket.io": "^4.8.1"
   },
