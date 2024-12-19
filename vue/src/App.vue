@@ -33,21 +33,71 @@ const logout = () => {
           <div class="flex items-center space-x-8">
             <!-- Páginas Comuns -->
             <!--<RouterLink to="/" class="nav-link">Home</RouterLink>-->
-            <RouterLink
-              v-show="storeAuth.user"
-              :to="{ name: 'transactions' }"
-              class="nav-link"
-            >
+            <RouterLink v-show="storeAuth.user" :to="{ name: 'transactions' }" class="nav-link">
               Transaction History
             </RouterLink>
 
             <!-- Admin Links -->
-            <RouterLink
-              v-show="storeAuth.user && storeAuth.user.type === 'A'"
-              :to="{ name: 'users' }"
-              class="nav-link"
-            >
+            <RouterLink v-show="storeAuth.user && storeAuth.user.type === 'A'" :to="{ name: 'users' }" class="nav-link">
               Users
+            </RouterLink>
+
+            <!-- Player Links -->
+            <template v-if="storeAuth.userType === 'P'">
+              <b class="text-sm font-medium text-gray-700 whitespace-nowrap">
+                Brain coins: {{ storeAuth.userCoins }}
+              </b>
+              <RouterLink :to="{ name: 'create transaction' }" class="nav-link">
+                Buy Coins
+              </RouterLink>
+              <RouterLink to="/dashboard" class="nav-link">Dashboard</RouterLink>
+            </template>
+
+
+          <!-- Leaderboards + Historico -->
+          <RouterLink v-if="storeAuth.userType == 'P'" to="/leaderboards"
+            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-blue-600 font-semibold">
+            Leaderboards
+          </RouterLink>
+          <RouterLink v-if="!(storeAuth.userType == 'P')" to="/leaderboard/global"
+            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-blue-600 font-semibold">
+            Leaderboards Globais
+          </RouterLink>
+            <!-- Leaderboards + Historico -->
+            <RouterLink v-show="storeAuth.user" to="/leaderboards"
+              class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              active-class="text-blue-600 font-semibold">
+              Leaderboards
+            </RouterLink>
+            <RouterLink v-show="!storeAuth.user" to="/leaderboard/global"
+              class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              active-class="text-blue-600 font-semibold">
+              Leaderboards Globais
+            </RouterLink>
+
+          <RouterLink v-if="storeAuth.userType == 'P'" to="/historico"
+            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-blue-600 font-semibold">
+            Game History
+          </RouterLink>
+          <RouterLink v-if="storeAuth.userType == 'A'" to="/historico/all"
+            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-blue-600 font-semibold">
+            All Games History
+          </RouterLink>
+
+            <RouterLink v-show="storeAuth.user" to="/historico"
+              class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              active-class="text-blue-600 font-semibold">
+              Game History
+            </RouterLink>
+            
+            <RouterLink :to="{ name: 'statistics' }"
+              class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              active-class="text-blue-600 font-semibold">
+              Statistics
             </RouterLink>
 
             <!-- Player Links -->
@@ -62,62 +112,22 @@ const logout = () => {
             </template>
           </div>
 
-          <!-- Leaderboards + Historico -->
-          <RouterLink v-if="storeAuth.userType == 'P'" to="/leaderboards"
-            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-blue-600 font-semibold">
-            Leaderboards
-          </RouterLink>
-          <RouterLink v-if="!(storeAuth.userType == 'P')" to="/leaderboard/global"
-            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-blue-600 font-semibold">
-            Leaderboards Globais
-          </RouterLink>
-
-          <RouterLink v-if="storeAuth.userType == 'P'" to="/historico"
-            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-blue-600 font-semibold">
-            Game History
-          </RouterLink>
-          <RouterLink v-if="storeAuth.userType == 'A'" to="/historico/all"
-            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-blue-600 font-semibold">
-            All Games History
-          </RouterLink>
-
-
           <!-- Perfil + Logout (direita) -->
           <div class="flex items-center space-x-6">
-            <RouterLink
-              v-show="storeAuth.user"
-              :to="{ name: 'profile' }"
-              class="nav-link flex items-center space-x-2"
-            >
+            <RouterLink v-show="storeAuth.user" :to="{ name: 'profile' }" class="nav-link flex items-center space-x-2">
               <span>{{ storeAuth.userFirstLastName || ' ' }}</span>
-              <img
-                v-if="storeAuth.userPhotoUrl"
-                class="w-10 h-10 rounded-full"
-                :src="storeAuth.userPhotoUrl"
-                alt="User avatar"
-              />
+              <img v-if="storeAuth.userPhotoUrl" class="w-10 h-10 rounded-full" :src="storeAuth.userPhotoUrl"
+                alt="User avatar" />
             </RouterLink>
             <RouterLink v-show="storeAuth.userType == 'P'" :to="{ name: 'remove account' }"
-            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-blue-600 font-semibold">
-            Remove Account
-          </RouterLink>
-            <button
-              v-show="storeAuth.user"
-              @click="logout"
-              class="logout-btn"
-            >
+              class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              active-class="text-blue-600 font-semibold">
+              Remove Account
+            </RouterLink>
+            <button v-show="storeAuth.user" @click="logout" class="logout-btn">
               Logout
             </button>
-            <RouterLink
-              v-show="!storeAuth.user"
-              :to="{ name: 'login' }"
-              class="nav-link"
-            >
+            <RouterLink v-show="!storeAuth.user" :to="{ name: 'login' }" class="nav-link">
               Login
             </RouterLink>
           </div>

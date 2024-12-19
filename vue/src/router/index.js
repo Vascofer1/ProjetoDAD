@@ -28,6 +28,7 @@ import AllGamesHistory from '@/components/historico/AllGamesHistory.vue'
 import Leaderboards from '@/components/Leaderboards.vue'
 import GameHistory from '@/components/GameHistory.vue'
 import authGuard from '@/stores/authGuard'
+import Statistics from '@/components/Statistics.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -167,7 +168,11 @@ const router = createRouter({
       meta: {allowedRoles: ['P']},
       beforeEnter: authGuard
     },
-
+    {
+      path: '/statistics',
+      name: 'statistics',
+      component: Statistics
+    }
 
   ]
 });

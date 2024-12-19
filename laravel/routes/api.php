@@ -33,6 +33,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //games
     Route::post('/games', [GameController::class, 'store'])->can('access', Game::class);
     Route::put('/games/{gameId}/{boardId}', [GameController::class, 'update'])->can('access', Game::class);
+    Route::get('/games', [GameController::class, 'index']);
 
 
     Route::get('/user/singleplayer', [HistoryController::class, 'singlePlayerHistory'])->can('notAdmin', User::class); 

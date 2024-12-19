@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\GameResource;
 use Illuminate\Http\Request;
 use App\Models\Game;
+use Illuminate\Support\Facades\DB;
 
 class GameController extends Controller
 {
-    
+
+    public function index()
+    {
+        return GameResource::collection(Game::get());
+    }
+
     public function store(Request $request)
     {
         // Validação dos dados recebidos
@@ -22,9 +29,9 @@ class GameController extends Controller
             'board_id' => 'required|integer',
             'total_turns_winner' => 'nullable|integer',
         ]);
-        
-        
-        
+
+
+
         $game = Game::create($validated);
 
         return response()->json([
@@ -96,7 +103,7 @@ class GameController extends Controller
         // Atualizar o jogo na base de dados
         $game->update($validated);
 
-        
+
         $game->save();
 
         return response()->json([
@@ -104,23 +111,4 @@ class GameController extends Controller
             'game' => $game,
         ]);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
-

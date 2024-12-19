@@ -69,6 +69,10 @@ export const useAuthStore = defineStore('auth', () => {
   const totalUsers = computed(() => {
     return users.value ? users.value.length : 0
   })
+  
+  const totalPlayers = computed(() => {
+    return users.value ? users.value.filter(user => user.type === 'P').length : 0
+  })
 
   const totalFilteredUsers = computed(() => {
     return filteredUsers.value ? filteredUsers.value.length : 0
@@ -453,6 +457,7 @@ export const useAuthStore = defineStore('auth', () => {
     userBlocked,
     userPhotoUrl,
     totalUsers,
+    totalPlayers,
     totalFilteredUsers,
     filteredUsers,
     filterByType,
