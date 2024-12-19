@@ -4,7 +4,7 @@ namespace App\Policies;
 
 use App\Models\Game;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+
 
 class GamePolicy
 {
@@ -19,17 +19,21 @@ class GamePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function access(User $user, Game $game = null)
+    public function view(User $user, Game $game): bool
     {
-        return $user->type === 'P';
+        
     }
+
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function manageGames(User $user): bool
     {
-        //
+        if ($user->type === 'A') { 
+            return false; 
+        } 
+        return true;
     }
 
     /**

@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GameController;
+use App\Models\Game;
 
 Route::get('/users/lol', [AuthController::class , 'lol']);
 Route::get('/transactions/lol', [TransactionController::class , 'lol']);
@@ -27,8 +28,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/transactions/{transaction}', [TransactionController::class, 'show']); 
 
     //games
-    Route::post('/games', [GameController::class, 'store'])->can('access', Game::class);
-    Route::put('/games/{gameId}/{boardId}', [GameController::class, 'update'])->can('access', Game::class);
+    Route::post('/games', [GameController::class, 'store']);
+    Route::put('/games/{gameId}/{boardId}', [GameController::class, 'update']);
 
    });
 

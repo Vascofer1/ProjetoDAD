@@ -51,7 +51,7 @@ function getCurrentDateTime() {
 }
 async function updateGameEnd(time, turns) {
   try {
-    const response = await axios.put(`http://localhost:8085/api/games/${props.gameId}/${props.boardId}`, {
+    const response = await axios.put(`/games/${props.gameId}/${props.boardId}`, {
       total_time: time,
       total_turns_winner: turns,
       status:"E",
@@ -66,7 +66,7 @@ async function updateGameEnd(time, turns) {
 
 async function updateGameStart() {
   try {
-    const response = await axios.put(`http://localhost:8085/api/games/${props.gameId}/${props.boardId}`, {
+    const response = await axios.put(`games/${props.gameId}/${props.boardId}`, {
       
       began_at: getCurrentDateTime(),
     });
@@ -104,6 +104,14 @@ const initializeGame = () => {
     "/images/cards/c13.png", "/images/cards/e1.png", "/images/cards/e2.png",
     "/images/cards/e3.png", "/images/cards/e4.png", "/images/cards/e5.png",
     "/images/cards/e6.png", "/images/cards/e7.png", "/images/cards/e11.png",
+    "/images/cards/e12.png", "/images/cards/e13.png", "/images/cards/o1.png",
+    "/images/cards/o2.png", "/images/cards/o3.png", "/images/cards/o4.png",
+    "/images/cards/o5.png", "/images/cards/o6.png", "/images/cards/o7.png",
+    "/images/cards/o11.png", "/images/cards/o12.png", "/images/cards/o13.png",
+    "/images/cards/p1.png", "/images/cards/p2.png", "/images/cards/p3.png",
+    "/images/cards/p4.png", "/images/cards/p5.png", "/images/cards/p6.png",
+    "/images/cards/p7.png", "/images/cards/p11.png", "/images/cards/p12.png",
+    "/images/cards/p13.png"
   ];
 
   if (images.length < totalPairs) {

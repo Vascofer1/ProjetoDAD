@@ -1,7 +1,7 @@
 <template>
   <div class="game">
     <h1>Tabuleiro 3x4</h1>
-    <MemoryBoard :rows="3" :columns="4" :gameId="gameId" :boardId="boardId" />
+    <MemoryBoard :rows="4" :columns="3" :gameId="gameId" :boardId="boardId" />
     <router-link to="/dashboard" class="back-link">Voltar ao Dashboard</router-link>
   </div>
 </template>
