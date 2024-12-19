@@ -43,12 +43,12 @@ const logout = () => {
             </RouterLink>
 
             <!-- Leaderboards + Historico -->
-            <RouterLink v-show="storeAuth.user" to="/leaderboards"
+            <RouterLink v-if="storeAuth.userType == 'P'" to="/leaderboards"
               class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               active-class="text-blue-600 font-semibold">
               Leaderboards
             </RouterLink>
-            <RouterLink v-show="!storeAuth.user" to="/leaderboard/global"
+            <RouterLink v-if="!(storeAuth.userType == 'P')" to="/leaderboard/global"
               class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               active-class="text-blue-600 font-semibold">
               Leaderboards Globais
@@ -59,7 +59,7 @@ const logout = () => {
               active-class="text-blue-600 font-semibold">
               Game History
             </RouterLink>
-            
+
             <RouterLink :to="{ name: 'statistics' }"
               class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
               active-class="text-blue-600 font-semibold">
@@ -77,18 +77,6 @@ const logout = () => {
               <RouterLink to="/dashboard" class="nav-link">Dashboard</RouterLink>
             </template>
           </div>
-
-          <!-- Leaderboards + Historico -->
-          <RouterLink v-if="storeAuth.userType == 'P'" to="/leaderboards"
-            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-blue-600 font-semibold">
-            Leaderboards
-          </RouterLink>
-          <RouterLink v-if="!(storeAuth.userType == 'P')" to="/leaderboard/global"
-            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            active-class="text-blue-600 font-semibold">
-            Leaderboards Globais
-          </RouterLink>
 
           <RouterLink v-if="storeAuth.userType == 'P'" to="/historico"
             class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
