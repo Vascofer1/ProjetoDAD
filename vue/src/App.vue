@@ -3,26 +3,37 @@ import { useTemplateRef, provide, onMounted, ref } from 'vue'
 import Toaster from './components/ui/toast/Toaster.vue';
 import { useAuthStore } from '@/stores/auth'
 import GlobalAlertDialog from '@/components/common/GlobalAlertDialog.vue'
-
+import { useAudioStore } from './stores/audio';
 
 const alertDialog = useTemplateRef('alert-dialog')
 provide('alertDialog', alertDialog)
 
 const storeAuth = useAuthStore()
+const audioStore = useAudioStore()
 
 const logoutConfirmed = () => {
   storeAuth.logout()
+  audioStore.stopBackgroundMusic()
 }
 const logout = () => {
   alertDialog.value.open(logoutConfirmed,
     'Logout confirmation?', 'Cancel', `Yes, I want to log out`,
     `Are you sure you want to log out? You can still access your account later with 
   your credentials.`)
+  
 }
+
+const toggleMute = () => {
+  audioStore.toggleMute();
+};
+
+
 
 </script>
 
 <template>
+
+
   <Toaster />
   <GlobalAlertDialog ref="alert-dialog"></GlobalAlertDialog>
   <div class="min-h-screen bg-gray-50">
@@ -108,6 +119,12 @@ const logout = () => {
             <RouterLink v-show="!storeAuth.user" :to="{ name: 'login' }" class="nav-link">
               Login
             </RouterLink>
+
+            <button v-show="storeAuth.user" @click="toggleMute"  
+              class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+              active-class="text-blue-600 font-semibold">
+              {{ audioStore.isMuted ? 'Unmute Music' : 'Mute Music' }}
+            </button> 
           </div>
 
         </nav>
