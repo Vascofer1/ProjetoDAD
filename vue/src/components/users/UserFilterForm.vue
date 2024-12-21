@@ -47,9 +47,6 @@ const resetFilter = () => {
     filterByNickname.value = null
 }
 
-const applyFilter = () => {
-    console.log('Apply Filter')
-}
 </script>
 
 <template>
@@ -82,8 +79,8 @@ const applyFilter = () => {
                 <select id="input_filter_blocked_id" class="p-2 grow h-10 border-gray-300 border rounded-lg text-base"            
                     v-model="filterByBlocked">
                     <option :value="null">-- Any --</option>
-                    <option :value="true">Blocked</option>
-                    <option :value="false">Not Blocked</option>
+                    <option :value=1>Blocked</option>
+                    <option :value=0>Not Blocked</option>
                 </select>
             </div>
 

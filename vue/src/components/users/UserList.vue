@@ -19,7 +19,7 @@ const props = defineProps({
             <span class="flex-[1] font-bold"></span> <!-- For buttons -->
         </div>
     <div class="divide-y divide-solid divide-gray-300 border border-gray-300">
-        <User v-for="user in users" :key="user" 
+        <User v-for="user in props.users" :key="user" 
                 :user="user" 
                 :readonly="readonly"></User>
     </div>            

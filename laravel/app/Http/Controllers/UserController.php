@@ -10,76 +10,87 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-   public function index()
+   public function index(Request $request)
    {
-      return UserResource::collection(User::get());
+      $user = $request->user();
+      if (!$user) {
+         return response()->json(['error' => 'User not authenticated'], 401);
+      }
+
+      //se o campo deleted_at estiver preenchido, o user não é contado na listagem
+      $query = User::query()->whereNull('deleted_at');
+      if ($request->has('nickname')) {
+         $query->where('nickname', $request->input('nickname'));
+      }
+      if ($request->has('type')) {
+         $query->where('type', $request->input('type'));
+      }
+      if ($request->has('blocked')) {
+         $query->where('blocked', $request->input('blocked'));
+      }
+
+      $users = $query->paginate(50);
+
+      return UserResource::collection($users);
    }
 
    public function show(User $user)
    {
       return new UserResource($user);
    }
-   
+
 
    public function showMe(Request $request)
    {
       return new UserResource($request->user());
    }
 
-   public function destroy(User $user)
+   /*public function destroy(User $user)
     {
         $user->delete();
         return response()->json(null, 204);
-    }
+    }*/
 
 
-    public function deleteUser(User $user)
-    {
-        $user->deleted_at = now();
-        $user->save();
+   public function deleteUser(User $user)
+   {
+      $user->brain_coins_balance = 0;
+      $user->deleted_at = now();
+      $user->save();
 
-        return response()->json(null, 204);
-    }
-
-
-    // apagar o user com um soft delete
-
+      return response()->json(null, 204);
+   }
 
 
    public function store(StoreUpdateUserRequest $request)
    {
-       $user = new User();
-       $user->fill($request->validated());
-      // $user->created_by_id = $request->user() ? $request->user()->id : null; 
-       $user->save();
-
-       return new UserResource($user);
-   }
-
-
-   public function update(StoreUpdateUserRequest $request, User $user)
-   {
-      /*if ($request->hasFile('photo_url')) {
-         $path = $request->file('photo_url')->store('public/photos');
-         $user->photo_url = basename($path); // Salva o nome do arquivo no banco
-     }
- 
-     // Atualiza os outros campos sem sobrescrever a foto já salva
-     $user->fill($request->except('photo_url')); 
-     $user->save();*/
-      if ($request->hasFile('input_photo_id')) {
-         $path = $request->file('input_photo_id')->store('public/photos');
-         $user->photo_url = basename($path);
-         $user->save();
-     }
+      $user = new User();
       $user->fill($request->validated());
+
+      if ($request->filled('password')) {
+         $user->password = bcrypt($request->input('password'));
+      }
+
+      // $user->created_by_id = $request->user() ? $request->user()->id : null; 
       $user->save();
 
       return new UserResource($user);
    }
 
 
+   public function update(StoreUpdateUserRequest $request, User $user)
+   {
+      $user->fill($request->validated());
+      if ($request->hasFile('photo_url')) {
+         $path = $request->file('photo_url')->store('public/photos');
+         $user->photo_filename = basename($path);
+         $user->save();
+      }
 
+      $user->save();
+
+      return new UserResource($user);
+   }
 
 
    public function blockUpdate(User $user)
@@ -91,12 +102,20 @@ class UserController extends Controller
    }
 
 
-   public function userDeleted(User $user)
+   public function updateUserPhoto(Request $request, User $user)
    {
-      $user->deleted_at = now();
+      // Validar se a imagem foi enviada
+      $request->validate([
+         'photo_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+      ]);
+
+      // Salvar a imagem na pasta storage/app/public/photos
+      $path = $request->file('photo_url')->store('photos', 'public');
+
+      // Atualizar o nome do arquivo no us
+      $user->photo_filename = basename($path);
       $user->save();
 
       return new UserResource($user);
    }
-
 }

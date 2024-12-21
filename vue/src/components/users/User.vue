@@ -29,8 +29,13 @@ const deleteUser = () => {
 }
 
 const blockUser = () => {
-    alertDialog.value.open(blockConfirmed, 'Are you sure?', 'Cancel', `Yes, block player #${props.user.id}`,
+    if(props.user.blocked === 0) {
+        alertDialog.value.open(blockConfirmed, 'Are you sure?', 'Cancel', `Yes, block player #${props.user.id}`,
         `This will block the player #${props.user.id} "${props.user.name}" from our servers.`)
+    } else{
+        alertDialog.value.open(blockConfirmed, 'Are you sure?', 'Cancel', `Yes, unblock player #${props.user.id}`,
+        `This will unblock the player #${props.user.id} "${props.user.name}" from our servers.`)
+    }
 }
 
 

@@ -20,6 +20,16 @@ import Game3x4 from '../components/games/Game3x4.vue';
 import Game4x4 from '../components/games/Game4x4.vue';
 import Game6x6 from '../components/games/Game6x6.vue';
 import MemoryBoard from '@/components/MemoryBoard.vue';
+import MultiPlayerHistory from '@/components/historico/MultiPlayerHistory.vue'
+import SinglePlayerHistory from '@/components/historico/SinglePlayerHistory.vue'
+import LeaderboardGlobal from '@/components/leaderboards/LeaderboardGlobal.vue'
+import LeaderboardPessoal from '@/components/leaderboards/LeaderboardPessoal.vue'
+import AllGamesHistory from '@/components/historico/AllGamesHistory.vue'
+import Leaderboards from '@/components/Leaderboards.vue'
+import GameHistory from '@/components/GameHistory.vue'
+import authGuard from '@/stores/authGuard'
+import Statistics from '@/components/Statistics.vue'
+import Graphics from '@/components/Graphics.vue'
 import GamePersonalizado from '@/components/games/GamePersonalizado.vue'
 import MultiPlayerGames from '@/components/multiPlayer/MultiPlayerGames.vue'
 import Chat from '@/components/chat/Chat.vue'
@@ -28,7 +38,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
+      path: '/home',
       name: 'home',
       component: HomeComponent
     },
@@ -42,11 +52,12 @@ const router = createRouter({
         {
           path: 'websocket',
           component: WebSocketTester
-        }
+        },
+        
       ]
     },
     {
-      path: '/login',
+      path: '/',
       name: 'login',
       component: LoginPage
     },
@@ -130,11 +141,66 @@ const router = createRouter({
       name: 'chat',
       component: Chat,
     },
+    {
+      path: '/historico/',
+      name: 'gameHistory',
+      component: GameHistory,
+      meta: {allowedRoles: ['P']},
+      beforeEnter: authGuard
+    },
+    {
+      path: '/historico/singleplayer',
+      name: 'singleplayerHistory',
+      component: SinglePlayerHistory,
+      meta: {allowedRoles: ['P']},
+      beforeEnter: authGuard
+    },
+    {
+      path: '/historico/multiplayer',
+      name: 'MultiplayerHistory',
+      component: MultiPlayerHistory,
+      meta: {allowedRoles: ['P']},
+      beforeEnter: authGuard
+    },
+    {
+      path: '/historico/all',
+      name: 'AllGamesHistory',
+      component: AllGamesHistory,
+      meta: {allowedRoles: ['A']},
+      beforeEnter: authGuard
+    },
+    {
+      path: "/leaderboards",
+      name: "leaderboards",
+      component: Leaderboards,
+      meta: {allowedRoles: ['P']},
+      beforeEnter: authGuard
+    },
+    {
+      path: '/leaderboard/global',
+      name: 'leaderboardGlobal',
+      component: LeaderboardGlobal
+    },
+    {
+      path: '/leaderboard/personal',
+      name: 'leaderboardPersonal',
+      component: LeaderboardPessoal,
+      meta: {allowedRoles: ['P']},
+      beforeEnter: authGuard
+    },
+    {
+      path: '/statistics',
+      name: 'statistics',
+      component: Statistics
+    },
+    {
+      path: '/statistics/graphics',
+      name: 'graphics',
+      component: Graphics,
+      meta: {allowedRoles: ['A']},
+      beforeEnter: authGuard
+    }
 
-
-    
-    
-    
   ]
 });
 
@@ -147,7 +213,7 @@ router.beforeEach(async (to, from, next) => {
     await storeAuth.restoreToken()
   }
   // routes "profile" and "RemoveUser" are only accessible when user is logged in 
-  if (((to.name == 'profile') || (to.name == 'RemoveUser') || (to.name == 'create transaction') || (to.name == 'transactions') || (to.name == 'dashboard')) && (!storeAuth.user)) {
+  if (((to.name == 'profile') || (to.name == 'RemoveUser') || (to.name == 'create transaction') || (to.name == 'transactions') || (to.name == 'dashboard') || (to.name == 'home')) && (!storeAuth.user)) {
     next({ name: 'login' })
     return
   }

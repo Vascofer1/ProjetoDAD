@@ -11,8 +11,9 @@ class Game extends Model
     use HasFactory;
 
     protected $table = 'games';
-
+    
     protected $fillable = [
+        'id',
         'created_user_id',
         'winner_user_id',
         'type',
@@ -23,4 +24,16 @@ class Game extends Model
         'board_id',
         'total_turns_winner',
     ];
+
+    public function boards()
+    {
+        return $this->hasMany(Board::class);
+    }
+        
+    public function multiplayerGamesPlayed()
+{
+    return $this->hasMany(MultiplayerGamesPlayed::class, 'game_id', 'id');
+}
+        
+
 }

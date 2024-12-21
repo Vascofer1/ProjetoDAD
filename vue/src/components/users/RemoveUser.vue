@@ -31,9 +31,9 @@ const cancel = () => {
 
 const deleteConfirmed = async () => {
   storeError.resetMessages()
-
+  
   if (nickname.value == user.value.nickname) {
-        if (await userStore.deleteUser()) {
+        if (await userStore.deleteUserMe()) {
             router.push({ name: 'home' }); // Redirecionar para a pagina principal
         }
     }
@@ -60,7 +60,7 @@ const deleteUser = () => {
     </div>
     <ErrorMessage class="ps-[6.5rem]" :errorMessage="storeError.fieldMessage('password')"></ErrorMessage> -->
 
-    <div class="flex flex-col">
+    <div v-if="user.type == 'P'" class="flex flex-col">
                 <div class="flex space-x-1 align-middle">
                     <label for="input_nickname_id" class="w-24 font-medium text-sm leading-10">Nickname</label>
                     <input type="text" id="input_nickname_id" class="px-4 grow h-10 border-gray-300 border rounded-lg text-base"
@@ -68,14 +68,14 @@ const deleteUser = () => {
                 </div>
             </div>
 
-    <div class="pt-4 flex space-x-4 justify-end">
+    <div v-if="user.type == 'P'" class="pt-4 flex space-x-4 justify-end">
         <button type="button" class="w-24 h-10 text-sm font-bold rounded-md 
                                             border border-transparent bg-gray-400 text-white 
                                             hover:bg-gray-500 focus:outline-none focus:bg-gray-500"
             @click.prevent="cancel">
             Cancel
         </button>
-        <button type="button" class="w-24 h-10 text-sm font-bold rounded-md 
+        <button v-if="user.type == 'P'" type="button" class="w-24 h-10 text-sm font-bold rounded-md 
                                             border border-transparent bg-red-700 text-white 
                                             hover:bg-red-800 focus:outline-none focus:bg-red-800"
             @click.prevent="deleteUser">

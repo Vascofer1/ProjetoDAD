@@ -4,6 +4,10 @@
       <p><strong>Tempo:</strong> {{ formatTime }}</p>
       <p><strong>Jogadas:</strong> {{ turns }}</p>
     </header>
+
+
+
+
     <div class="grid" :style="{ gridTemplateColumns: `repeat(${columns}, 1fr)` }">
       <MemoryCard
         v-for="(card, index) in cards"
@@ -21,6 +25,9 @@ import MemoryCard from "./MemoryCard.vue"; // Subcomponente para uma carta
 import axios from "axios";
 import { defineProps } from 'vue';
 import router from "@/router";
+import { useAudioStore } from '@/stores/audio';
+
+const audioStore = useAudioStore();
 
 const props = defineProps({
   gameId: Number,
@@ -159,7 +166,8 @@ const checkMatch = () => {
       setTimeout(() => {
         flippedCards.forEach((card) => (card.matched = true));
         if (cards.value.every((card) => card.matched)) {
-          stopTimer();
+          audioStore.playVictorySound();
+          stopTimer();  
           alert(`Parabéns! Você completou o jogo em ${formatTime.value}!`);
           //-------------------------------------------------------------
           updateGameEnd(timer.value, turns.value);

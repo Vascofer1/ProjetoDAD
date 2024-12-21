@@ -22,7 +22,6 @@ const alertDialog = inject('alertDialog')
         <div class="flex flex-col grow">
             <div class="text-base pe-4 grow leading-10 flex space-x-2">
                 <span class="w-12">#{{ transaction.id }}</span>
-                <span>{{ transaction.name }}</span>
             </div>
             <span class="text-xs ps-4 pb-2 -mt-1 text-gray-500">
                 User Id: {{ transaction.user_id }}</span>
