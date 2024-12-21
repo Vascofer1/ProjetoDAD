@@ -335,31 +335,6 @@ export const useAuthStore = defineStore('auth', () => {
 
 
 
-  const insertAdmin = async (admin) => {
-    storeError.resetMessages()
-    try {
-      const photo = user.photo_url
-      user.photo_url = null
-      user.photoFileName = null
-
-      const response = await axios.post('admin', admin)
-      users.value.push(response.data.data)
-      toast({
-        description: `Admin #${response.data.data.id} was created!`,
-      })
-
-      // Verifique se o campo photo_url é um arquivo e adicione ao FormData
-      if (photo instanceof File) {
-        updateUserPhoto(photo, response.data.data.id)
-      }
-
-      return response.data.data
-    } catch (e) {
-      storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error inserting admin!')
-      return false
-    }
-  }
-
 
   const getUser = async (user) => {
     const responseUser = await axios.get('users/me')
@@ -479,7 +454,6 @@ export const useAuthStore = defineStore('auth', () => {
     pagination,
     restoreToken,
     canUpdateDeleteUser,
-    insertAdmin,
     blockUser,
     login,
     logout,

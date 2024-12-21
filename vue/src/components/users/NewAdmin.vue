@@ -17,6 +17,9 @@ const user = ref({
     email: '',
     type: 'A',
     photoFileName: '',
+    coins: 0,
+    blocked: 0,
+    deleted_at: null
 })
 
 const create = async (user) => {
@@ -32,5 +35,5 @@ const cancel = () => {
 </script>
 
 <template>
-    <UserForm :user="user" title="Create New Admin" @save="create" @cancel="cancel"></UserForm>
+    <UserForm :user="user" title="Create new user" @save="create" @cancel="cancel"></UserForm>
 </template>
