@@ -29,6 +29,17 @@ class AuthController extends Controller
     {
         $this->purgeExpiredTokens();
         $credentials = $request->validated();
+
+
+        // Verifique se o usuário existe e se não foi "deletado"
+        $user = User::where('email', $credentials['email'])->whereNull('deleted_at')->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'User is not authorized or has been deactivated'], 401);
+        }
+
+
+
         if (!Auth::attempt($credentials)) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }

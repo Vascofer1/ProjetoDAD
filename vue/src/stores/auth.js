@@ -421,7 +421,28 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const deleteUser = async () => {
+  const deleteUser = async (user) => {
+    storeError.resetMessages()
+    try {
+      const nickname = user.nickname
+      const id = user.id
+
+      await axios.delete('users/' + id + '/deleted')
+      const index = getIndexOfUser(id)
+      if (index > -1) {
+        users.value.splice(index, 1)
+      }
+      toast({
+        description: `user #${id} "${nickname}" was deleted!`,
+      })
+      return true
+    } catch (e) {
+      storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error deleting user!')
+      return false
+    }
+  }    
+
+  const deleteUserMe = async () => {
     storeError.resetMessages()
     try {
       const nickname = user.value.nickname
@@ -442,7 +463,7 @@ export const useAuthStore = defineStore('auth', () => {
       storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error deleting user!')
       return false
     }
-  }    
+  }  
 
   
   return {
@@ -476,6 +497,7 @@ export const useAuthStore = defineStore('auth', () => {
     deleteUser,
     getUser,
     insertUser,
-    deleteUser
+    deleteUser,
+    deleteUserMe
   }
 })
