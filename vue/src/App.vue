@@ -70,6 +70,11 @@ const toggleMute = () => {
                 Game History
               </RouterLink>
             </template>
+            <template v-if="storeAuth.userType === 'A'">
+              <RouterLink to="/historico/all" class="nav-link" active-class="active-link">
+                All Games History
+              </RouterLink>
+            </template>
 
             <RouterLink :to="{ name: 'statistics' }" class="nav-link" active-class="active-link">
               Statistics
