@@ -37,6 +37,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/games/games-per-month', [GameController::class, 'gamesPerMonth']);
     Route::get('/games/last-week', [GameController::class, 'gamesLastWeek']);
     Route::get('/games/last-month', [GameController::class, 'gamesLastMonth']);
+    Route::get('/games/per-type', [GameController::class, 'gamesPerType']);
 
 
     Route::get('/user/singleplayer', [HistoryController::class, 'singlePlayerHistory'])->can('notAdmin', User::class); 

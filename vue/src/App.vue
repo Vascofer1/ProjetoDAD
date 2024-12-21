@@ -41,67 +41,38 @@ const toggleMute = () => {
           <!-- Left & Middle Navigation -->
           <div class="flex items-center space-x-8">
             <!-- Common Pages -->
-            <RouterLink
-              v-show="storeAuth.user"
-              :to="{ name: 'transactions' }"
-              class="nav-link"
-              active-class="active-link"
-            >
+            <RouterLink v-show="storeAuth.user" :to="{ name: 'transactions' }" class="nav-link"
+              active-class="active-link">
               Transaction History
             </RouterLink>
 
             <!-- Admin Links -->
-            <RouterLink
-              v-show="storeAuth.user && storeAuth.user.type === 'A'"
-              :to="{ name: 'users' }"
-              class="nav-link"
-              active-class="active-link"
-            >
+            <RouterLink v-show="storeAuth.user && storeAuth.user.type === 'A'" :to="{ name: 'users' }" class="nav-link"
+              active-class="active-link">
               Users
             </RouterLink>
 
             <!-- Player/Global Leaderboards -->
-            <RouterLink
-              v-if="storeAuth.userType === 'P'"
-              to="/leaderboards"
-              class="nav-link"
-              active-class="active-link"
-            >
+            <RouterLink v-if="storeAuth.userType === 'P'" to="/leaderboards" class="nav-link"
+              active-class="active-link">
               Leaderboards
             </RouterLink>
-            <RouterLink
-              v-if="storeAuth.userType !== 'P'"
-              to="/leaderboard/global"
-              class="nav-link"
-              active-class="active-link"
-            >
+            <RouterLink v-if="storeAuth.userType !== 'P'" to="/leaderboard/global" class="nav-link"
+              active-class="active-link">
               Global Leaderboards
             </RouterLink>
 
             <template v-if="storeAuth.userType === 'P'">
-              <RouterLink
-                to="/dashboard"
-                class="nav-link"
-                active-class="active-link"
-              >
+              <RouterLink to="/dashboard" class="nav-link" active-class="active-link">
                 Dashboard
               </RouterLink>
             </template>
 
-            <RouterLink
-              v-show="storeAuth.user"
-              to="/historico"
-              class="nav-link"
-              active-class="active-link"
-            >
+            <RouterLink v-show="storeAuth.user" to="/historico" class="nav-link" active-class="active-link">
               Game History
             </RouterLink>
 
-            <RouterLink
-              :to="{ name: 'statistics' }"
-              class="nav-link"
-              active-class="active-link"
-            >
+            <RouterLink :to="{ name: 'statistics' }" class="nav-link" active-class="active-link">
               Statistics
             </RouterLink>
 
@@ -110,11 +81,7 @@ const toggleMute = () => {
               <p class="font-semibold text-gray-800">
                 Coins: {{ storeAuth.userCoins }}
               </p>
-              <RouterLink
-                :to="{ name: 'create transaction' }"
-                class="nav-link"
-                active-class="active-link"
-              >
+              <RouterLink :to="{ name: 'create transaction' }" class="nav-link" active-class="active-link">
                 Buy Coins
               </RouterLink>
             </template>
@@ -122,37 +89,18 @@ const toggleMute = () => {
 
           <!-- Right Navigation -->
           <div class="flex items-center space-x-6">
-            <RouterLink
-              v-show="storeAuth.user"
-              :to="{ name: 'profile' }"
-              class="nav-link flex items-center space-x-2"
-            >
+            <RouterLink v-show="storeAuth.user" :to="{ name: 'profile' }" class="nav-link flex items-center space-x-2">
               <span class="font-medium">{{ storeAuth.userFirstLastName || ' ' }}</span>
-              <img
-                v-if="storeAuth.userPhotoUrl"
-                class="w-10 h-10 rounded-full"
-                :src="storeAuth.userPhotoUrl"
-                alt="User avatar"
-              />
+              <img v-if="storeAuth.userPhotoUrl" class="w-10 h-10 rounded-full" :src="storeAuth.userPhotoUrl"
+                alt="User avatar" />
             </RouterLink>
-            <button
-              v-show="storeAuth.user"
-              @click="logout"
-              class="btn-primary"
-            >
+            <button v-show="storeAuth.user" @click="logout" class="btn-primary">
               Logout
             </button>
-            <RouterLink
-              v-show="!storeAuth.user"
-              :to="{ name: 'login' }"
-            >
+            <RouterLink v-show="!storeAuth.user" :to="{ name: 'login' }">
               Login
             </RouterLink>
-            <button
-              v-show="storeAuth.user"
-              @click="toggleMute"
-              class="nav-link"
-            >
+            <button v-show="storeAuth.user" @click="toggleMute" class="nav-link">
               {{ audioStore.isMuted ? 'Unmute Music' : 'Mute Music' }}
             </button>
           </div>

@@ -14,6 +14,7 @@ export const useGameStore = defineStore('game', () => {
     const gamesPerMonth = ref([]);
     const gamesPerWeek = ref([]);
     const gamesLastMonth = ref([]);
+    const gamesPerType = ref([]);
 
     const router = useRouter()
 
@@ -37,6 +38,12 @@ export const useGameStore = defineStore('game', () => {
         storeError.resetMessages()
         const response = await axios.get('games/last-month')
         gamesLastMonth.value = response.data.data
+    }
+
+    const fetchGamesPerType = async () => {
+        storeError.resetMessages()
+        const response = await axios.get('games/per-type')
+        gamesPerType.value = response.data.data
     }
 
     // This function is "private" - not exported by the store
@@ -72,6 +79,8 @@ export const useGameStore = defineStore('game', () => {
         gamesPerMonth,
         gamesPerWeek,
         gamesLastMonth,
+        gamesPerType,
+        fetchGamesPerType,
         fetchGamesLastMonth,
         fetchGamesLastWeek,
         fetchGames,

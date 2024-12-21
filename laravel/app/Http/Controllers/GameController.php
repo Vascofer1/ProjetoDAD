@@ -91,40 +91,55 @@ class GameController extends Controller
         ]);
     }*/
     public function gamesPerMonth()
-{
-    $games = Game::query()
-        ->selectRaw("DATE_FORMAT(began_at, '%Y-%m') as month, COUNT(*) as gamesCount")
-        ->where('began_at', '>=', now()->subMonths(6)) // Filter for last 6 months
-        ->groupBy('month')
-        ->orderBy('month', 'asc')
-        ->get();
+    {
+        $games = Game::query()
+            ->selectRaw("DATE_FORMAT(began_at, '%Y-%m') as month, COUNT(*) as gamesCount")
+            ->where('began_at', '>=', now()->subMonths(6)) // Filter for last 6 months
+            ->groupBy('month')
+            ->orderBy('month', 'asc')
+            ->get();
 
-    return response()->json([
-        'success' => true,
-        'data' => $games,
-    ]);
-}
+        return response()->json([
+            'success' => true,
+            'data' => $games,
+        ]);
+    }
 
 
-    public function gamesLastWeek(){
+    public function gamesLastWeek()
+    {
         $totalGamesLastWeek = Game::query()
             ->where('began_at', '>=', now()->subWeek())
             ->count();
-    
+
         return response()->json([
             'success' => true,
             'data' => $totalGamesLastWeek, // Retorna apenas o total
         ]);
     }
 
-    public function gamesLastMonth(){
+    public function gamesLastMonth()
+    {
         $totalGamesLastMonth = Game::query()
             ->where('began_at', '>=', now()->subMonth())
             ->count();
-    
+
         return response()->json([
             'success' => true,
             'data' => $totalGamesLastMonth, // Retorna apenas o total
+        ]);
+    }
+
+    public function gamesPerType()
+    {
+        $games = Game::query()
+            ->selectRaw("type, COUNT(*) as gamesCount")
+            ->groupBy('type')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $games,
         ]);
     }
 
