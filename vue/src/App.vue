@@ -104,10 +104,15 @@ const handleMessageFromInputDialog = (message) => {
             active-class="text-blue-600 font-semibold">
             Transaction History
           </RouterLink>
-          <RouterLink v-show="storeAuth.userType == 'P'" to="/dashboard"
+          <RouterLink v-show="storeAuth.userType == 'P'" to="/single-player"
             class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
             active-class="text-blue-600 font-semibold">
-            Dashboard
+            Single Player
+          </RouterLink>
+          <RouterLink to="/chat"
+            class="text-gray-900 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            active-class="text-blue-600 font-semibold">
+            Chat Room
           </RouterLink>
         </nav>
       </div>

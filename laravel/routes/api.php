@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\MultiPlayerGameController;
 use App\Models\Game;
 
 Route::get('/users/lol', [AuthController::class , 'lol']);
@@ -31,6 +32,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/games', [GameController::class, 'store']);
     Route::put('/games/{gameId}/{boardId}', [GameController::class, 'update']);
 
+    //multiplayer games
+    /* Route::post('/multiplayergames', [MultiPlayerGameController::class, 'store']);
+    Route::put('/multiplayergames/{gameId}/{userId}', [MultiPlayerGameController::class, 'update']);
+ */
    });
 
 Route::post('/auth/login', [AuthController::class, 'login']);

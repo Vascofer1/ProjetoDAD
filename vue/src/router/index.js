@@ -22,6 +22,7 @@ import Game6x6 from '../components/games/Game6x6.vue';
 import MemoryBoard from '@/components/MemoryBoard.vue';
 import GamePersonalizado from '@/components/games/GamePersonalizado.vue'
 import MultiPlayerGames from '@/components/multiPlayer/MultiPlayerGames.vue'
+import Chat from '@/components/chat/Chat.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -89,7 +90,7 @@ const router = createRouter({
     {path: '/admin', name: 'admin', component: NewAdmin},
     {path: '/users', name: 'users', component: Users},
     
-    { path: '/dashboard',
+    { path: '/single-player',
       name: 'dashboard',
       component: Dashboard ,
       meta: { requiresAuth: true },
@@ -122,9 +123,15 @@ const router = createRouter({
     {
       path: '/multiplayer',
       name: 'multiplayer',
-      component: MultiPlayerGames,
-      props: true, 
-    }
+      component: MultiPlayerGames, 
+    },
+    {
+      path: '/chat',
+      name: 'chat',
+      component: Chat,
+    },
+
+
     
     
     

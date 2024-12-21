@@ -1,26 +1,26 @@
 <template>
   <div class="dashboard">
-    <h2 class="subtitle">MODOS DE JOGO</h2>
-    <h1>Escolha um tabuleiro para jogar</h1>
+    <h2 class="subtitle">GAME MODES</h2>
+    <h1>Choose a board to play</h1>
     <br />
     <div class="buttons">
-      <button @click="createGame(1)">Jogar Tabuleiro 3x4</button>
+      <button @click="createGame(1)">Play Board 3x4</button>
       <button @click="createGame(2)" :disabled="!canPlay">
-        Jogar Tabuleiro 4x4
+        Play Board 4x4
       </button>
       <button @click="createGame(3)" :disabled="!canPlay">
-        Jogar Tabuleiro 6x6
+        Play Board 6x6
       </button>
       <button @click="createCustomGame(4, rows, columns)" :disabled="!canPlay">
-        Jogar Tabuleiro Personalizado
+        Play Board Custom
       </button>
-      (tamanho max :8x9)
+      (max :8x9)
       <label>
-        Linhas:
+        Lines:
         <input type="number" v-model="rows" min="2" max="9" />
       </label>
       <label>
-        Colunas:
+        Columns:
         <input type="number" v-model="columns" min="2" max="9" />
       </label>
 

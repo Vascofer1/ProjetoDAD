@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useErrorStore } from '@/stores/error'
 import { useAuthStore } from '@/stores/auth'
-
+import { useRouter } from "vue-router";
 
 export const useLobbyStore = defineStore('lobby', () => {
     const storeAuth = useAuthStore()
@@ -11,7 +11,7 @@ export const useLobbyStore = defineStore('lobby', () => {
     const socket = inject('socket')
 
     const games = ref([])
-
+    const router = useRouter()
     const totalGames = computed(() => games.value.length)
 
     const webSocketServerResponseHasError = (response) => {
@@ -66,13 +66,32 @@ export const useLobbyStore = defineStore('lobby', () => {
             if (webSocketServerResponseHasError(response)) {
                 return
             }
-            const APIresponse = await axios.post('games', {
-                player1_id: response.player1.id,
-                player2_id: response.player2.id,
+            console.log('response:', response)
+            const APIresponse = await axios.post('/games', {
+                created_user_id: response.player1.id,
+                board_id: 1,
+                type: "M",
+                status: "PL",
             })
-            const newGameOnDB = APIresponse.data.data
+            const newGameOnDB = APIresponse.data
             newGameOnDB.player1SocketId = response.player1SocketId
             newGameOnDB.player2SocketId = response.player2SocketId
+            /* const multiplayerGame = await axios.post('/multiplayergames', {
+                user_id: response.player1.id,
+                game_id: newGameOnDB.id,
+                player_won: null,
+                pairs_discovered: 0,
+            })
+
+            const multiplayerGame2 = await axios.post('/multiplayergames', {
+                user_id: response.player2.id,
+                game_id: newGameOnDB.id,
+                player_won: null,
+                pairs_discovered: 0,
+            }) */
+            
+            
+            console.log('newGameOnDB:', newGameOnDB)
             // After adding the game to the DB emit a message to the server to start the game
             socket.emit('startGame', newGameOnDB, (startedGame) => {
                 console.log('Game has started', startedGame)
