@@ -66,11 +66,10 @@ const toggleMute = () => {
               <RouterLink to="/dashboard" class="nav-link" active-class="active-link">
                 Dashboard
               </RouterLink>
+              <RouterLink v-show="storeAuth.user" to="/historico" class="nav-link" active-class="active-link">
+                Game History
+              </RouterLink>
             </template>
-
-            <RouterLink v-show="storeAuth.user" to="/historico" class="nav-link" active-class="active-link">
-              Game History
-            </RouterLink>
 
             <RouterLink :to="{ name: 'statistics' }" class="nav-link" active-class="active-link">
               Statistics
@@ -122,6 +121,7 @@ const toggleMute = () => {
   padding: 0.5rem 1rem;
   border-radius: 0.375rem;
   transition: color 0.2s, background-color 0.2s;
+  text-align: center; /* Add this line */
 }
 
 .nav-link:hover {

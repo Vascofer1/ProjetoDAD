@@ -1,6 +1,6 @@
 <template>
     <div class="personal-leaderboard">
-      <h1>Personal Leaderboard</h1>
+      <h1 class="font-bold">Personal Leaderboard</h1>
   
 
       <!-- Singleplayer-->

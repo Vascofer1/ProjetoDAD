@@ -1,9 +1,10 @@
 <template>
   <div class="history">
-    <h1>Game History</h1>
+    <h1 class="font-bold">Game History</h1>
     <div>
-      <button @click="goToSingleplayerHistory">Historico singleplayer</button>
-      <button @click="goToMultiplayerHistory">Historico multiplayer</button>
+      <button @click="goToSingleplayerHistory">My single-player history</button>
+      <br>
+      <button @click="goToMultiplayerHistory">My multiplayer history</button>
     </div>
   </div>
 </template>
@@ -11,18 +12,18 @@
 <script setup>
 import router from '@/router';
 
-    const goToSingleplayerHistory = () => {
-      router.push("/historico/singleplayer");
-    };
+const goToSingleplayerHistory = () => {
+  router.push("/historico/singleplayer");
+};
 
-    const goToMultiplayerHistory = () => {
-      router.push("/historico/multiplayer");
-    };
+const goToMultiplayerHistory = () => {
+  router.push("/historico/multiplayer");
+};
 
 </script>
 
 <style scoped>
-.leaderboards {
+.history {
   padding: 20px;
 }
 
@@ -31,9 +32,11 @@ button {
   font-size: 16px;
   margin: 10px;
   cursor: pointer;
+  background-color: #c8c8c8;
+  width: 220px; /* Increase the width of the buttons */
 }
 
 button:hover {
-  background-color: #f0f0f0;
+  background-color: #b7b6b6;
 }
 </style>
