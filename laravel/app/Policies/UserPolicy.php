@@ -51,12 +51,12 @@ class UserPolicy
         return $authUser->id === $user->id || $authUser->isAdmin();
     } 
  
-    public function delete(User $user): bool 
+    public function delete(User $authUser, User $user): bool 
     { 
-        if ($user->type == 'A') { 
-            return false; 
+        if ($authUser->type == 'A') { 
+            return $authUser->id != $user->id; 
         } 
-        return true; 
+        return $authUser->id === $user->id; 
     }
 
 

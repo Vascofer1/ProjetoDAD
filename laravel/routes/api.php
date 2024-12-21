@@ -23,7 +23,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/users', [UserController::class, 'index'])->can('view', User::class);
     Route::get('/users/{user}', [UserController::class, 'show']);
     Route::patch('/users/{user}/block', [UserController::class, 'blockUpdate'])->can('block', 'user');
-    Route::delete('/users/{user}/deleted', [UserController::class, 'deleteUser']);
+    Route::delete('/users/{user}/deleted', [UserController::class, 'deleteUser'])->can('delete', 'user');
 
     //transactions
     Route::post('/transactions', [TransactionController::class , 'store']);
