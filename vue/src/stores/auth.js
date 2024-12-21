@@ -348,11 +348,8 @@ export const useAuthStore = defineStore('auth', () => {
       user.photo_url = null
       user.photoFileName = null
 
-      console.log(user, "oi")
       const response = await axios.post('users', user)
-      console.log(users.value.push(response.data.data), "ola")
       users.value.push(response.data.data)
-      console.log("alo", response.data.data)
       toast({
         description: `user #${response.data.data.id} "${response.data.data.name}" was created!`,
         action: h(ToastAction, {
