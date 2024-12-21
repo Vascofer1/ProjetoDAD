@@ -18,12 +18,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::post('/auth/refreshtoken', [AuthController::class, 'refreshToken']);
     Route::get('/users/me', [UserController::class , 'showMe']);
-    Route::put('/users/{user}', [UserController::class, 'update']);//->can('update', 'user'); 
+    Route::put('/users/{user}', [UserController::class, 'update'])->can('update', 'user'); 
     //Route::delete('/users/{user}', [UserController::class, 'destroy'])->can('delete', 'user');
     Route::get('/users', [UserController::class, 'index'])->can('view', User::class);
     Route::get('/users/{user}', [UserController::class, 'show']);
     Route::patch('/users/{user}/block', [UserController::class, 'blockUpdate'])->can('block', 'user');
-    Route::delete('/users/{user}/deleted', [UserController::class, 'deleteUser']);
+    Route::delete('/users/{user}/deleted', [UserController::class, 'deleteUser'])->can('delete', 'user');
 
     //transactions
     Route::post('/transactions', [TransactionController::class , 'store']);
@@ -34,6 +34,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/games', [GameController::class, 'store'])->can('access', Game::class);
     Route::put('/games/{gameId}/{boardId}', [GameController::class, 'update'])->can('access', Game::class);
     Route::get('/games', [GameController::class, 'index']);
+    Route::get('/games/games-per-month', [GameController::class, 'gamesPerMonth']);
+    Route::get('/games/last-week', [GameController::class, 'gamesLastWeek']);
+    Route::get('/games/last-month', [GameController::class, 'gamesLastMonth']);
+    Route::get('/games/per-type', [GameController::class, 'gamesPerType']);
 
 
     Route::get('/user/singleplayer', [HistoryController::class, 'singlePlayerHistory'])->can('notAdmin', User::class); 

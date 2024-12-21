@@ -1,6 +1,7 @@
 <template>
     <div class="game-history">
 
+    <h1 class="font-bold">Global Leaderboard</h1>
       <div v-if="singlePlayer.length">
       <SinglePlayerLeaderboard
         :data="singlePlayer"
@@ -9,8 +10,10 @@
     </div>
     <p v-else>No games found.</p>
 
-
+    <br>
+    <br>
     
+    <h1 class="font-bold">Multiplayer Leaderboard</h1>
     <div v-if="multiPlayer.length">
       <MultiPlayerLeaderboard
         :data="multiPlayer"

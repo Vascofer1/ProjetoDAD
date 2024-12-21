@@ -12,6 +12,9 @@ export const useGameStore = defineStore('game', () => {
     const games = ref([])
     const game = ref(null)
     const gamesPerMonth = ref([]);
+    const gamesPerWeek = ref([]);
+    const gamesLastMonth = ref([]);
+    const gamesPerType = ref([]);
 
     const router = useRouter()
 
@@ -23,6 +26,24 @@ export const useGameStore = defineStore('game', () => {
         storeError.resetMessages()
         const response = await axios.get('games')
         games.value = response.data.data
+    }
+
+    const fetchGamesLastWeek = async () => {
+        storeError.resetMessages()
+        const response = await axios.get('games/last-week')
+        gamesPerWeek.value = response.data.data
+    }
+
+    const fetchGamesLastMonth = async () => {
+        storeError.resetMessages()
+        const response = await axios.get('games/last-month')
+        gamesLastMonth.value = response.data.data
+    }
+
+    const fetchGamesPerType = async () => {
+        storeError.resetMessages()
+        const response = await axios.get('games/per-type')
+        gamesPerType.value = response.data.data
     }
 
     // This function is "private" - not exported by the store
@@ -42,14 +63,12 @@ export const useGameStore = defineStore('game', () => {
         return response.data.data
     }
 
+    // acrescenta o código necessário para fazer um gráfico de barras com a quantidade de jogos por mês
     const fetchGamesPerMonth = async () => {
-        try {
-            const response = await axios.get('games-per-month');
-            gamesPerMonth.value = response.data;
-        } catch (error) {
-            console.error('Error fetching games per month:', error);
-        }
-    };
+        storeError.resetMessages()
+        const response = await axios.get('games/games-per-month')
+        gamesPerMonth.value = response.data.data
+    }
 
     
 
@@ -58,6 +77,12 @@ export const useGameStore = defineStore('game', () => {
         game,
         totalGames,
         gamesPerMonth,
+        gamesPerWeek,
+        gamesLastMonth,
+        gamesPerType,
+        fetchGamesPerType,
+        fetchGamesLastMonth,
+        fetchGamesLastWeek,
         fetchGames,
         fetchGame,
         fetchGamesPerMonth,

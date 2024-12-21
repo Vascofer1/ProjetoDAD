@@ -10,16 +10,35 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-   public function index()
+   public function index(Request $request)
    {
-      return UserResource::collection(User::get());
+      $user = $request->user();
+      if (!$user) {
+         return response()->json(['error' => 'User not authenticated'], 401);
+      }
+
+      //se o campo deleted_at estiver preenchido, o user não é contado na listagem
+      $query = User::query()->whereNull('deleted_at');
+      if ($request->has('nickname')) {
+         $query->where('nickname', $request->input('nickname'));
+      }
+      if ($request->has('type')) {
+         $query->where('type', $request->input('type'));
+      }
+      if ($request->has('blocked')) {
+         $query->where('blocked', $request->input('blocked'));
+      }
+
+      $users = $query->paginate(50);
+
+      return UserResource::collection($users);
    }
 
    public function show(User $user)
    {
       return new UserResource($user);
    }
-   
+
 
    public function showMe(Request $request)
    {
@@ -33,14 +52,14 @@ class UserController extends Controller
     }*/
 
 
-    public function deleteUser(User $user)
-    {
+   public function deleteUser(User $user)
+   {
       $user->brain_coins_balance = 0;
       $user->deleted_at = now();
       $user->save();
 
       return response()->json(null, 204);
-    }
+   }
 
 
    public function store(StoreUpdateUserRequest $request)
@@ -61,13 +80,13 @@ class UserController extends Controller
 
    public function update(StoreUpdateUserRequest $request, User $user)
    {
-     $user->fill($request->validated());
+      $user->fill($request->validated());
       if ($request->hasFile('photo_url')) {
          $path = $request->file('photo_url')->store('public/photos');
          $user->photo_filename = basename($path);
          $user->save();
-     }
-      
+      }
+
       $user->save();
 
       return new UserResource($user);
