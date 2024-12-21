@@ -114,7 +114,7 @@ const handleFileChange = (event) => {
                 <ErrorMessage class="ps-[6.5rem]" :errorMessage="storeError.fieldMessage('password')"></ErrorMessage>
 
                 <div class="flex justify-end space-x-4 pt-4">
-                    <RouterLink v-if="props.user.type=='P'" :to="{ name: 'remove account' }" class="text-center w-24 h-10 text-sm font-bold rounded-md 
+                    <RouterLink v-if="props.type == 'updateUser'" :to="{ name: 'remove account' }" class="text-center w-24 h-10 text-sm font-bold rounded-md 
                border border-transparent bg-red-700 text-white 
                hover:bg-gray-500 focus:outline-none focus:bg-gray-500">
                         Remove Account
