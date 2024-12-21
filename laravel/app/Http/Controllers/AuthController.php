@@ -34,7 +34,7 @@ class AuthController extends Controller
         // Verifique se o usuário existe e se não foi "deletado"
         $user = User::where('email', $credentials['email'])->whereNull('deleted_at')->first();
 
-        if (!$user) {
+        if (!$user || $user->blocked == 1) {
             return response()->json(['message' => 'User is not authorized or has been deactivated'], 401);
         }
 
