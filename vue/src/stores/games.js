@@ -1,10 +1,11 @@
-import { ref, computed } from 'vue'
+import { ref, computed, inject } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useErrorStore } from '@/stores/error'
 import { useRouter } from 'vue-router'
 import { useToast } from '@/components/ui/toast/use-toast'
 import { useAuthStore } from '@/stores/auth'
+
 
 export const useGameStore = defineStore('game', () => {
     const storeError = useErrorStore()
@@ -90,14 +91,11 @@ export const useGameStore = defineStore('game', () => {
     }
 })
 
-
 export const useGamesStore = defineStore('games', () => {
     const storeAuth = useAuthStore()
     const storeError = useErrorStore()
     const { toast } = useToast()
-    const socket = inject('socket')
-    
-    const router = useRouter(); 
+    const socket = inject('socket') 
     const games = ref([])
 
     const totalGames = computed(() => games.value.length)

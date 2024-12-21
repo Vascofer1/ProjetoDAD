@@ -2,7 +2,7 @@
     <div class="game">
       <h1>Tabuleiro 6x6</h1>
       <MemoryBoard :rows="6" :columns="6" :gameId="gameId" :boardId="boardId" />
-      <router-link to="/dashboard" class="back-link">Voltar ao Dashboard</router-link>
+      <router-link to="/single-player" class="back-link">Voltar ao Dashboard</router-link>
     </div>
   </template>
   

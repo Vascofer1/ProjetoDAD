@@ -3,8 +3,9 @@ import { useTemplateRef, provide, onMounted, ref, inject } from 'vue'
 import Toaster from './components/ui/toast/Toaster.vue';
 import { useAuthStore } from '@/stores/auth';
 import GlobalAlertDialog from '@/components/common/GlobalAlertDialog.vue';
-import { useAudioStore } from './stores/audio';import GlobalInputDialog from './components/common/GlobalInputDialog.vue'
-import { useChatStore } from '@/stores/chat'   
+import { useAudioStore } from './stores/audio'; 
+import GlobalInputDialog from './components/common/GlobalInputDialog.vue';
+import { useChatStore } from '@/stores/chat';
 
 const alertDialog = useTemplateRef('alert-dialog');
 provide('alertDialog', alertDialog);
@@ -31,18 +32,18 @@ const logout = () => {
 
 let userDestination = null
 socket.on('privateMessage', (messageObj) => {
-    userDestination = messageObj.user   
-    inputDialog.value.open(
-        handleMessageFromInputDialog,
-        'Message from ' + messageObj.user.name,
-        `This is a private message sent by ${messageObj?.user?.name}!`,
-        'Reply Message', '',
-        'Close', 'Reply',
-        messageObj.message
-    )
+  userDestination = messageObj.user
+  inputDialog.value.open(
+    handleMessageFromInputDialog,
+    'Message from ' + messageObj.user.name,
+    `This is a private message sent by ${messageObj?.user?.name}!`,
+    'Reply Message', '',
+    'Close', 'Reply',
+    messageObj.message
+  )
 })
 const handleMessageFromInputDialog = (message) => {
-    storeChat.sendPrivateMessageToUser(userDestination, message)
+  storeChat.sendPrivateMessageToUser(userDestination, message)
 }
 
 const toggleMute = () => {
@@ -72,75 +73,79 @@ const toggleMute = () => {
               Transaction History
             </RouterLink>
 
-            <!-- Admin Links -->
-            <RouterLink v-show="storeAuth.user && storeAuth.user.type === 'A'" :to="{ name: 'users' }" class="nav-link"
-              active-class="active-link">
-              Users
-            </RouterLink>
+                <!-- Admin Links -->
+                <RouterLink v-show="storeAuth.user && storeAuth.user.type === 'A'" :to="{ name: 'users' }"
+                  class="nav-link" active-class="active-link">
+                  Users
+                </RouterLink>
 
-            <!-- Player/Global Leaderboards -->
-            <RouterLink v-if="storeAuth.userType === 'P'" to="/leaderboards" class="nav-link"
-              active-class="active-link">
-              Leaderboards
-            </RouterLink>
-            <RouterLink v-if="storeAuth.userType !== 'P'" to="/leaderboard/global" class="nav-link"
-              active-class="active-link">
-              Global Leaderboards
-            </RouterLink>
+                <!-- Player/Global Leaderboards -->
+                <RouterLink v-if="storeAuth.userType === 'P'" to="/leaderboards" class="nav-link"
+                  active-class="active-link">
+                  Leaderboards
+                </RouterLink>
+                <RouterLink v-if="storeAuth.userType !== 'P'" to="/leaderboard/global" class="nav-link"
+                  active-class="active-link">
+                  Global Leaderboards
+                </RouterLink>
 
-            <template v-if="storeAuth.userType === 'P'">
-              <RouterLink to="/dashboard" class="nav-link" active-class="active-link">
-                Dashboard
-              </RouterLink>
-              <RouterLink v-show="storeAuth.user" to="/historico" class="nav-link" active-class="active-link">
-                Game History
-              </RouterLink>
-            </template>
+                <template v-if="storeAuth.userType === 'P'">
+                  
+                  <RouterLink v-show="storeAuth.user" to="/historico" class="nav-link" active-class="active-link">
+                    Game History
+                  </RouterLink>
+                </template>
             <template v-if="storeAuth.userType === 'A'">
               <RouterLink to="/historico/all" class="nav-link" active-class="active-link">
                 All Games History
               </RouterLink>
             </template>
 
-            <RouterLink :to="{ name: 'statistics' }" class="nav-link" active-class="active-link">
-              Statistics
-            </RouterLink>
+                <RouterLink to="/single-player" class="nav-link" active-class="active-link">
+                    Single Player
+                </RouterLink>
 
-            <!-- Player Links -->
-            <template v-if="storeAuth.userType === 'P'">
-              <p class="font-semibold text-gray-800">
-                Coins: {{ storeAuth.userCoins }}
-              </p>
-              <RouterLink :to="{ name: 'create transaction' }" class="nav-link" active-class="active-link">
-                Buy Coins
-              </RouterLink>
-            </template>
-          </div>
+                <RouterLink :to="{ name: 'statistics' }" class="nav-link" active-class="active-link">
+                  Statistics
+                </RouterLink>
 
-          <!-- Right Navigation -->
-          <div class="flex items-center space-x-6">
-            <RouterLink v-show="storeAuth.user" :to="{ name: 'profile' }" class="nav-link flex items-center space-x-2">
-              <span class="font-medium">{{ storeAuth.userFirstLastName || ' ' }}</span>
-              <img v-if="storeAuth.userPhotoUrl" class="w-10 h-10 rounded-full" :src="storeAuth.userPhotoUrl"
-                alt="User avatar" />
-            </RouterLink>
-            <button v-show="storeAuth.user" @click="logout" class="btn-primary">
-              Logout
-            </button>
-            <RouterLink v-show="!storeAuth.user" :to="{ name: 'login' }">
-              Login
-            </RouterLink>
-            <button v-show="storeAuth.user" @click="toggleMute" class="nav-link">
-              {{ audioStore.isMuted ? 'Unmute Music' : 'Mute Music' }}
-            </button>
+                <!-- Player Links -->
+                <template v-if="storeAuth.userType === 'P'">
+                  <p class="font-semibold text-gray-800">
+                    Coins: {{ storeAuth.userCoins }}
+                  </p>
+                  <RouterLink :to="{ name: 'create transaction' }" class="nav-link" active-class="active-link">
+                    Buy Coins
+                  </RouterLink>
+                  
+                </template>
+              </div>
+
+              <!-- Right Navigation -->
+              <div class="flex items-center space-x-6">
+                <RouterLink v-show="storeAuth.user" :to="{ name: 'profile' }"
+                  class="nav-link flex items-center space-x-2">
+                  <span class="font-medium">{{ storeAuth.userFirstLastName || ' ' }}</span>
+                  <img v-if="storeAuth.userPhotoUrl" class="w-10 h-10 rounded-full" :src="storeAuth.userPhotoUrl"
+                    alt="User avatar" />
+                </RouterLink>
+                <button v-show="storeAuth.user" @click="logout" class="btn-primary">
+                  Logout
+                </button>
+                <RouterLink v-show="!storeAuth.user" :to="{ name: 'login' }">
+                  Login
+                </RouterLink>
+                <button v-show="storeAuth.user" @click="toggleMute" class="nav-link">
+                  {{ audioStore.isMuted ? 'Unmute Music' : 'Mute Music' }}
+                </button>
+              </div>
+            </nav>
           </div>
-        </nav>
+        </header>
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <RouterView />
+        </main>
       </div>
-    </header>
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <RouterView />
-    </main>
-  </div>
 </template>
 
 <style scoped>
@@ -152,7 +157,8 @@ const toggleMute = () => {
   padding: 0.5rem 1rem;
   border-radius: 0.375rem;
   transition: color 0.2s, background-color 0.2s;
-  text-align: center; /* Add this line */
+  text-align: center;
+  /* Add this line */
 }
 
 .nav-link:hover {

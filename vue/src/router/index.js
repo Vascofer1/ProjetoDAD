@@ -16,6 +16,7 @@ import TransactionRead from '@/components/transactions/TransactionRead.vue'
 import UserUpdate from '@/components/users/UserUpdate.vue'
 import User from '@/components/users/User.vue'
 import Users from '@/components/users/Users.vue'
+import GameAnon from '../components/games/GameAnon.vue';
 import Game3x4 from '../components/games/Game3x4.vue';
 import Game4x4 from '../components/games/Game4x4.vue';
 import Game6x6 from '../components/games/Game6x6.vue';
@@ -111,6 +112,12 @@ const router = createRouter({
       path: '/games/:gameId/:boardId',
       name: 'game3x4',
       component: Game3x4,
+      props: true, // Isso permite que o Vue Router passe os parâmetros como props para o componente
+    },
+    {
+      path: '/games3x4',
+      name: 'gameAnon',
+      component: GameAnon,
       props: true, // Isso permite que o Vue Router passe os parâmetros como props para o componente
     },
     {
@@ -213,7 +220,7 @@ router.beforeEach(async (to, from, next) => {
     await storeAuth.restoreToken()
   }
   // routes "profile" and "RemoveUser" are only accessible when user is logged in 
-  if (((to.name == 'profile') || (to.name == 'RemoveUser') || (to.name == 'create transaction') || (to.name == 'transactions') || (to.name == 'dashboard') || (to.name == 'home')) && (!storeAuth.user)) {
+  if (((to.name == 'profile') || (to.name == 'RemoveUser') || (to.name == 'create transaction') || (to.name == 'transactions') || (to.name == 'home')) && (!storeAuth.user)) {
     next({ name: 'login' })
     return
   }

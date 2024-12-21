@@ -34,6 +34,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //games
     Route::post('/games', [GameController::class, 'store']);
     Route::put('/games/{gameId}/{boardId}', [GameController::class, 'update']);
+    Route::put('/games/{gameId}/{boardId}/{rows}/{columns}', [GameController::class, 'update']);
     Route::get('/games', [GameController::class, 'index']);
     Route::get('/games/games-per-month', [GameController::class, 'gamesPerMonth']);
     Route::get('/games/last-week', [GameController::class, 'gamesLastWeek']);

@@ -1,7 +1,7 @@
 <template>
     <div class="game">
-      <h1>Tabuleiro Personalizado</h1>
-      <MemoryBoard :rows="rows" :columns="columns" :gameId="gameId" :boardId="boardId" />
+      <h1>Tabuleiro 3x4</h1>
+      <MemoryBoard :rows="4" :columns="3" :gameId="gameId" :boardId="boardId" />
       <router-link to="/single-player" class="back-link">Voltar ao Dashboard</router-link>
     </div>
   </template>
@@ -12,11 +12,7 @@
   defineProps({
     gameId: Number,
     boardId: Number,
-    rows: Number,
-    columns: Number,
   });
-
-  
   
   </script>
   

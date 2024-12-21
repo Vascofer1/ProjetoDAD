@@ -4,17 +4,21 @@
     <h1>Choose a board to play</h1>
     <br />
     <div class="buttons">
-      <button @click="createGame(1)">Play Board 3x4</button>
-      <button @click="createGame(2)" :disabled="!canPlay">
+      <RouterLink to="/games3x4">
+        <button v-if ="isAnonymous">Play Board 3x4</button>
+      </RouterLink>
+      <button v-if ="!isAnonymous" @click="createGame(1)">Play Board 3x4</button>
+      <button v-if ="!isAnonymous" @click="createGame(2)" :disabled="!canPlay">
         Play Board 4x4
       </button>
-      <button @click="createGame(3)" :disabled="!canPlay">
+      <button v-if ="!isAnonymous" @click="createGame(3)" :disabled="!canPlay">
         Play Board 6x6
       </button>
-      <button @click="createCustomGame(4, rows, columns)" :disabled="!canPlay">
+      <button v-if ="!isAnonymous" @click="createCustomGame(4, rows, columns)" :disabled="!canPlay">
         Play Board Custom
       </button>
-      (max :8x9)
+      <div v-if ="!isAnonymous">
+        (max :8x9)
       <label>
         Lines:
         <input type="number" v-model="rows" min="2" max="9" />
@@ -23,6 +27,8 @@
         Columns:
         <input type="number" v-model="columns" min="2" max="9" />
       </label>
+      </div>
+      
 
     </div>
   </div>
@@ -41,7 +47,9 @@ import { ref, computed } from 'vue';
 import { useAuthStore } from '@/stores/auth'
 
 
-
+const isAnonymous = computed(() => {
+  return !user.value;
+});
 
 const userStore = useAuthStore();
 const user = ref(null);
