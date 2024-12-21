@@ -58,7 +58,12 @@ const nextPage = async () => {
             Users
         </h2>
         <br>
+        <div v-if="storeAuth.totalUsers > 0">
         <UserList :readonly="!storeAuth.user" :users="storeAuth.filteredUsers"></UserList>
+        </div>
+        <div v-else>
+            <p>No users found.</p>
+        </div>
         <br>
         <div class="pagination">
             <button class="w-18 h-8 text-sm font-bold rounded-md 
