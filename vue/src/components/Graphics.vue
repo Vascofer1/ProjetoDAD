@@ -178,8 +178,11 @@ onMounted(async () => {
           <canvas id="gamesChart" width="600" height="300" style="border:1px solid #ccc;"></canvas>
         </div>
         <div class="chart-item">
-          <h2>Games Played by Type</h2>
+          <h2>Total Games Played by Type</h2>
           <canvas id="gamesPieChart" width="400" height="400" style="border:1px solid #ccc;"></canvas>
+            <p v-for="(item, index) in gamesPerType" :key="index">
+            {{ item.type === 'S' ? 'Single-player' : 'Multiplayer' }}: {{ item.gamesCount }} games
+            </p>
         </div>
       </div>
     </div>
