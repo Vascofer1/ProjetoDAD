@@ -75,20 +75,6 @@ const handleFileChange = (event) => {
                 <ErrorMessage class="ps-[6.5rem]" :errorMessage="storeError.fieldMessage('nickname')"></ErrorMessage>
             </div>
 
-            <!-- <div class="flex flex-col">
-                <div class="flex space-x-1 align-middle">
-                    <label for="input_photo_id" class="w-24 font-medium text-sm leading-10">Photo File Name</label>
-                    <input type="text" id="input_photo_id" class="px-4 grow h-10 border-gray-300 border rounded-lg text-base"
-                            v-model="user.photoFileName">     
-                </div>
-                <div class="row">
-                    <p class="col-md-5">
-                        <img class="img-thumbnail" :src="user.photoFileName" alt="Avatar">
-                    </p>
-                </div>                
-                <ErrorMessage class="ps-[6.5rem]" :errorMessage="storeError.fieldMessage('photoFileName')"></ErrorMessage>
-            </div>-->
-
             <!-- Input para upload de imagem -->
             <div class="flex flex-col">
                 <div class="flex space-x-1 align-middle">
@@ -126,20 +112,24 @@ const handleFileChange = (event) => {
                         v-model="user.password_confirmation">
                 </div>
                 <ErrorMessage class="ps-[6.5rem]" :errorMessage="storeError.fieldMessage('password')"></ErrorMessage>
-            </div>
-            <div class="pt-4 flex space-x-4 justify-end">
-                <button type="button" class="w-24 h-10 text-sm font-bold rounded-md 
-                                            border border-transparent bg-gray-400 text-white 
-                                            hover:bg-gray-500 focus:outline-none focus:bg-gray-500"
-                    @click.prevent="clickCancel">
-                    Cancel
-                </button>
-                <button type="button" class="w-24 h-10 text-sm font-bold rounded-md 
-                                            border border-transparent bg-green-700 text-white 
-                                            hover:bg-green-800 focus:outline-none focus:bg-green-800"
-                    @click.prevent="clickSave(user)">
-                    Save
-                </button>
+
+                <div class="flex justify-end space-x-4 pt-4">
+                    <RouterLink :to="{ name: 'remove account' }" class="text-center w-24 h-10 text-sm font-bold rounded-md 
+               border border-transparent bg-red-700 text-white 
+               hover:bg-gray-500 focus:outline-none focus:bg-gray-500">
+                        Remove Account
+                    </RouterLink>
+                    <button type="button" class="w-24 h-10 text-sm font-bold rounded-md 
+               border border-transparent bg-gray-400 text-white 
+               hover:bg-gray-500 focus:outline-none focus:bg-gray-500" @click.prevent="clickCancel">
+                        Cancel
+                    </button>
+                    <button type="button" class="w-24 h-10 text-sm font-bold rounded-md 
+               border border-transparent bg-green-700 text-white 
+               hover:bg-green-800 focus:outline-none focus:bg-green-800" @click.prevent="clickSave(user)">
+                        Save
+                    </button>
+                </div>
             </div>
         </div>
     </div>
