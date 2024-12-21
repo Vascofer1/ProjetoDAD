@@ -429,7 +429,21 @@ export const useAuthStore = defineStore('auth', () => {
       storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error deleting user!')
       return false
     }
-  }  
+  }
+
+  const filterDescription = computed(() => {
+    let description = 'All users'
+    if (filterByType.value) {
+      description += ' of type ' + filterByType.value
+    }
+    if (filterByBlocked.value) {
+      description += ' and blocked'
+    }
+    if (filterByNickname.value) {
+      description += ' with nickname containing ' + filterByNickname.value
+    }
+    return description
+  })
 
   
   return {

@@ -3,7 +3,7 @@ import { useTemplateRef, provide, onMounted, ref, inject } from 'vue'
 import Toaster from './components/ui/toast/Toaster.vue';
 import { useAuthStore } from '@/stores/auth';
 import GlobalAlertDialog from '@/components/common/GlobalAlertDialog.vue';
-import { useAudioStore } from './stores/audio'; 
+import { useAudioStore } from './stores/audio';
 import GlobalInputDialog from './components/common/GlobalInputDialog.vue';
 import { useChatStore } from '@/stores/chat';
 
@@ -57,21 +57,18 @@ const toggleMute = () => {
   <GlobalAlertDialog ref="alert-dialog"></GlobalAlertDialog>
   <div class="min-h-screen bg-gradient-to-r from-gray-100 to-blue-50">
     <header class="bg-white shadow-md">
-    </header>
-  </div>
-
-  <GlobalInputDialog ref="input-dialog"></GlobalInputDialog>
-  <div class="min-h-screen bg-gray-50">
-    <header class="bg-white shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <nav class="flex items-center justify-between h-16">
-          <!-- Left & Middle Navigation -->
-          <div class="flex items-center space-x-8">
-            <!-- Common Pages -->
-            <RouterLink v-show="storeAuth.user" :to="{ name: 'transactions' }" class="nav-link"
-              active-class="active-link">
-              Transaction History
-            </RouterLink>
+      <GlobalInputDialog ref="input-dialog"></GlobalInputDialog>
+      <div class="min-h-screen bg-gray-50">
+        <header class="bg-white shadow-sm">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav class="flex items-center justify-between h-16">
+              <!-- Left & Middle Navigation -->
+              <div class="flex items-center space-x-8">
+                <!-- Common Pages -->
+                <RouterLink v-show="storeAuth.user" :to="{ name: 'transactions' }" class="nav-link"
+                  active-class="active-link">
+                  Transaction History
+                </RouterLink>
 
                 <!-- Admin Links -->
                 <RouterLink v-show="storeAuth.user && storeAuth.user.type === 'A'" :to="{ name: 'users' }"
@@ -90,19 +87,23 @@ const toggleMute = () => {
                 </RouterLink>
 
                 <template v-if="storeAuth.userType === 'P'">
-                  
+
                   <RouterLink v-show="storeAuth.user" to="/historico" class="nav-link" active-class="active-link">
                     Game History
                   </RouterLink>
                 </template>
-            <template v-if="storeAuth.userType === 'A'">
-              <RouterLink to="/historico/all" class="nav-link" active-class="active-link">
-                All Games History
-              </RouterLink>
-            </template>
+                <template v-if="storeAuth.userType === 'A'">
+                  <RouterLink to="/historico/all" class="nav-link" active-class="active-link">
+                    All Games History
+                  </RouterLink>
+                </template>
 
                 <RouterLink to="/single-player" class="nav-link" active-class="active-link">
-                    Single Player
+                  Single Player
+                </RouterLink>
+
+                <RouterLink to="/chat" class="nav-link" active-class="active-link">
+                  Chat room
                 </RouterLink>
 
                 <RouterLink :to="{ name: 'statistics' }" class="nav-link" active-class="active-link">
@@ -117,7 +118,10 @@ const toggleMute = () => {
                   <RouterLink :to="{ name: 'create transaction' }" class="nav-link" active-class="active-link">
                     Buy Coins
                   </RouterLink>
-                  
+                  <RouterLink to="/multiplayer" class="nav-link" active-class="active-link">
+                    MultiPlayer
+                  </RouterLink>
+
                 </template>
               </div>
 
@@ -146,6 +150,8 @@ const toggleMute = () => {
           <RouterView />
         </main>
       </div>
+    </header>
+  </div>
 </template>
 
 <style scoped>
