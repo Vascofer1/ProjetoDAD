@@ -29,7 +29,7 @@ class UserPolicy
         if ($user->type == 'A') {
             return true;
         }
-        return null;
+        return false;
     } 
 
     public function notAdmin(User $user): bool 
