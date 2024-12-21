@@ -118,21 +118,6 @@ export const useAuthStore = defineStore('auth', () => {
     return description
   })
 
-  const filterDescription = computed(() => {
-    let description = 'All users'
-    if (filterByType.value) {
-      description += ' of type ' + filterByType.value
-    }
-    if (filterByBlocked.value) {
-      description += ' and blocked'
-    }
-    if (filterByNickname.value) {
-      description += ' with nickname containing ' + filterByNickname.value
-    }
-    return description
-  })
-
-
   // This function is "private" - not exported by the store
   const clearUser = () => {
     resetIntervalToRefreshToken()
