@@ -9,20 +9,37 @@ const storeError = useErrorStore()
 const storeAuth = useAuthStore()
 
 onMounted(async () => {
-  storeAuth.fetchUsers()
+  storeAuth.fetchUsers(1)
 })
 
-const updateFilterByType = (newValue) => {
-  storeAuth.filterByType = newValue
+const updateFilterByType = async (newValue) => {
+    storeAuth.filterByType = newValue
+    await storeAuth.fetchUsers(1)
 }
 
-const updateFilterByBlocked = (newValue) => {
+const updateFilterByBlocked = async (newValue) => {
   storeAuth.filterByBlocked = newValue
+  await storeAuth.fetchUsers(1)
 }
 
-const updateFilterByNickname = (newValue) => {
+const updateFilterByNickname = async (newValue) => {
   storeAuth.filterByNickname = newValue
+  await storeAuth.fetchUsers(1)
 }
+
+const previousPage = async () => {
+    if (storeAuth.currentPage > 1) {
+        await storeAuth.fetchUsers(storeAuth.currentPage - 1)
+    }
+}
+
+// Navegar para a próxima página
+const nextPage = async () => {
+    if (storeAuth.currentPage < storeAuth.totalPages) {
+        await storeAuth.fetchUsers(storeAuth.currentPage + 1)
+    }
+}
+
 </script>
 
 <template >
@@ -46,4 +63,16 @@ const updateFilterByNickname = (newValue) => {
         <br>
             <UserList :readonly="!storeAuth.user" :users="storeAuth.filteredUsers"></UserList>
     </div>
+    <br>
+    <div class="pagination">
+            <button class="w-18 h-8 text-sm font-bold rounded-md 
+                                            border border-transparent bg-blue-700 text-white 
+                                            hover:bg-blue-800 focus:outline-none focus:bg-blue-800" @click="previousPage" :disabled="storeAuth.currentPage === 1">Anterior</button>
+            <span> Página {{ storeAuth.currentPage }} de {{ storeAuth.totalPages }} </span>
+            <button class="w-18 h-8 text-sm font-bold rounded-md 
+                                            border border-transparent bg-blue-700 text-white 
+                                            hover:bg-blue-800 focus:outline-none focus:bg-blue-800" @click="nextPage"
+                :disabled="storeAuth.currentPage === storeAuth.totalPages">Próxima</button>
+        </div>
+        <br>
 </template>

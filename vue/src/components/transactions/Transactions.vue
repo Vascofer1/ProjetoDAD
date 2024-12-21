@@ -79,17 +79,18 @@ const nextPage = async () => {
             <p>No transactions found.</p>
         </div>
 
-
+        <br>
         <!-- Controles de Paginação -->
         <div class="pagination">
             <button class="w-18 h-8 text-sm font-bold rounded-md 
                                             border border-transparent bg-blue-700 text-white 
                                             hover:bg-blue-800 focus:outline-none focus:bg-blue-800" @click="previousPage" :disabled="storeTransaction.currentPage === 1">Anterior</button>
-            <span>Página {{ storeTransaction.currentPage }} de {{ storeTransaction.totalPages }}</span>
+            <span> Página {{ storeTransaction.currentPage }} de {{ storeTransaction.totalPages }} </span>
             <button class="w-18 h-8 text-sm font-bold rounded-md 
                                             border border-transparent bg-blue-700 text-white 
                                             hover:bg-blue-800 focus:outline-none focus:bg-blue-800" @click="nextPage"
                 :disabled="storeTransaction.currentPage === storeTransaction.totalPages">Próxima</button>
         </div>
+        <br>
     </div>
 </template>

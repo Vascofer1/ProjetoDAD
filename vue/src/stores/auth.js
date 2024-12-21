@@ -9,7 +9,6 @@ import { h } from 'vue'
 import { useTransactionStore } from '@/stores/transaction'
 
 import avatarNoneAssetURL from '@/assets/avatar-none.png'
-import { get } from '@vueuse/core'
 
 export const useAuthStore = defineStore('auth', () => {
   const storeError = useErrorStore()
@@ -19,6 +18,9 @@ export const useAuthStore = defineStore('auth', () => {
   const users = ref([])
   const user = ref(null)
   const token = ref('')
+  const currentPage = ref(1) // Página atual
+  const totalPages = ref(1) // Total de páginas disponíveis
+  const pagination = ref({})
 
   const router = useRouter()
 
@@ -39,10 +41,6 @@ export const useAuthStore = defineStore('auth', () => {
 
   const userType = computed(() => {
     return user.value ? user.value.type : ''
-  })
-
-  const userGender = computed(() => {
-    return user.value ? user.value.gender : ''
   })
 
   const userBlocked = computed(() => {
@@ -146,16 +144,30 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (page) => {
     storeError.resetMessages()
-    const response = await axios.get('users')
+    const params = {
+      page: page,
+      type: filterByType.value,
+      nickname: filterByNickname.value,
+      blocked: filterByBlocked.value
+  }
+  try{
+    const response = await axios.get('users', { params })
     users.value = response.data.data
+    currentPage.value = page
+    totalPages.value = response.data.meta.last_page
+    totalUsers.value = response.data.meta.total
+  }catch(e){
+    storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error fetching')
+  }
+    
   }
 
 
   const fetchUser = async (userId) => {
     storeError.resetMessages()
-    const response = await axios.get('users/' + usertId)
+    const response = await axios.get('users/' + userId)
     const index = getIndexOfUser(userId)
     if (index > -1) {
       // Instead of a direct assignment, object is cloned/copied to the array
@@ -305,28 +317,6 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
 
-  /*const deleteUser = async (user) => {
-    storeError.resetMessages()
-    try {
-      console.log(user.value.id, user.id)
-      const nickname = user.value.nickname
-      const id = user.value.id    
-
-      await axios.patch('users/' + user.id + '/deleted')
-      const index = getIndexOfUser(user.id)
-      if (index > -1) {
-        users.value.splice(index, 1)
-      }
-      toast({
-        description: `user #${id} "${nickname}" was deleted!`,
-      })
-      return true
-    } catch (e) {
-      storeError.setErrorMessages(e.response.data.message, e.response.data.errors, e.response.status, 'Error deleting user!')
-      return false
-    }
-  }*/
-
   const blockUser = async (user) => {
     storeError.resetMessages()
     try {
@@ -334,7 +324,7 @@ export const useAuthStore = defineStore('auth', () => {
       await axios.patch('users/' + user.id + '/block')
       const index = getIndexOfUser(user.id)
       if (index > -1) {
-        users.value[index].blocked = !users.value[index].blocked
+        users.value[index].blocked = users.value[index].blocked ? 0 : 1
       }
       return true
     } catch (e) {
@@ -473,7 +463,6 @@ export const useAuthStore = defineStore('auth', () => {
     userFirstLastName,
     userEmail,
     userType,
-    userGender,
     userCoins,
     userBlocked,
     userPhotoUrl,
@@ -485,6 +474,9 @@ export const useAuthStore = defineStore('auth', () => {
     filterByBlocked,
     filterByNickname,
     filterDescription,
+    currentPage,
+    totalPages,
+    pagination,
     restoreToken,
     canUpdateDeleteUser,
     insertAdmin,

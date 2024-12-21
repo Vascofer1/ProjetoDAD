@@ -23,7 +23,7 @@ class TransactionController extends Controller
         // Base query
         $query = Transaction::query();
 
-        // Filtrar por usuário, exceto se for administrador
+        // Filtrar por user, exceto se for administrador
         if ($user->type !== 'A') {
             $query->where('user_id', $user->id);
         }
