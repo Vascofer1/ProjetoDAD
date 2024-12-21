@@ -10,6 +10,7 @@ use App\Http\Controllers\LeaderBoardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\MultiPlayerGameController;
 use App\Models\Game;
 
 Route::get('/users/lol', [AuthController::class , 'lol']);
@@ -31,8 +32,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/transactions/{transaction}', [TransactionController::class, 'show']); 
 
     //games
-    Route::post('/games', [GameController::class, 'store'])->can('access', Game::class);
-    Route::put('/games/{gameId}/{boardId}', [GameController::class, 'update'])->can('access', Game::class);
+    Route::post('/games', [GameController::class, 'store']);
+    Route::put('/games/{gameId}/{boardId}', [GameController::class, 'update']);
     Route::get('/games', [GameController::class, 'index']);
     Route::get('/games/games-per-month', [GameController::class, 'gamesPerMonth']);
     Route::get('/games/last-week', [GameController::class, 'gamesLastWeek']);
@@ -45,6 +46,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/historico/all', [HistoryController::class, 'allGames'])->can('view', User::class); 
 
     Route::get('/leaderboard/personal', [LeaderBoardController::class, 'personalLeaderboard'])->can('notAdmin', User::class); 
+    //multiplayer games
+    /* Route::post('/multiplayergames', [MultiPlayerGameController::class, 'store']);
+    Route::put('/multiplayergames/{gameId}/{userId}', [MultiPlayerGameController::class, 'update']);
+ */
    });
 
 Route::post('/auth/login', [AuthController::class, 'login']);

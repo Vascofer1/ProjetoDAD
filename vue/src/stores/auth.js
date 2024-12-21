@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref, computed, inject } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useErrorStore } from '@/stores/error'
@@ -13,6 +13,7 @@ import avatarNoneAssetURL from '@/assets/avatar-none.png'
 export const useAuthStore = defineStore('auth', () => {
   const storeError = useErrorStore()
   const storeTransaction = useTransactionStore()
+  const socket = inject('socket')
 
   const { toast } = useToast()
   const users = ref([])
@@ -24,9 +25,20 @@ export const useAuthStore = defineStore('auth', () => {
 
   const router = useRouter()
 
+  const getFirstLastName = (fullName) => {
+    const names = fullName.trim().split(' ')
+    const firstName = names[0] ?? ''
+    const lastName = names.length > 1 ? names[names.length -1 ] : ''
+    return (firstName + ' ' + lastName).trim()
+}
+
   const userName = computed(() => {
     return user.value ? user.value.name : ''
   })
+
+  const userId = computed(() => {
+    return user.value ? user.value.id : -1
+})
 
   const userFirstLastName = computed(() => {
     const names = userName.value.trim().split(' ')
@@ -106,10 +118,27 @@ export const useAuthStore = defineStore('auth', () => {
     return description
   })
 
+  const filterDescription = computed(() => {
+    let description = 'All users'
+    if (filterByType.value) {
+      description += ' of type ' + filterByType.value
+    }
+    if (filterByBlocked.value) {
+      description += ' and blocked'
+    }
+    if (filterByNickname.value) {
+      description += ' with nickname containing ' + filterByNickname.value
+    }
+    return description
+  })
+
 
   // This function is "private" - not exported by the store
   const clearUser = () => {
     resetIntervalToRefreshToken()
+    if (user.value) {
+      socket.emit('logout', user.value)
+    }
     user.value = null
     token.value = ''
     localStorage.removeItem('token')
@@ -126,6 +155,7 @@ export const useAuthStore = defineStore('auth', () => {
       axios.defaults.headers.common.Authorization = 'Bearer ' + token.value
       const responseUser = await axios.get('users/me')
       user.value = responseUser.data.data
+      socket.emit('login', user.value)
       repeatRefreshToken()
 
       //mandar para a pagina principal depois do login
@@ -246,6 +276,7 @@ export const useAuthStore = defineStore('auth', () => {
         axios.defaults.headers.common.Authorization = 'Bearer ' + token.value
         const responseUser = await axios.get('users/me')
         user.value = responseUser.data.data
+        socket.emit('login', user.value)
         repeatRefreshToken()
         return true
       } catch {
@@ -432,6 +463,7 @@ export const useAuthStore = defineStore('auth', () => {
     user,
     users,
     userName,
+    userId,
     userFirstLastName,
     userEmail,
     userType,
@@ -461,6 +493,7 @@ export const useAuthStore = defineStore('auth', () => {
     getUser,
     insertUser,
     deleteUser,
-    deleteUserMe
+    deleteUserMe,
+    getFirstLastName
   }
 })

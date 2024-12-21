@@ -30,6 +30,9 @@ import GameHistory from '@/components/GameHistory.vue'
 import authGuard from '@/stores/authGuard'
 import Statistics from '@/components/Statistics.vue'
 import Graphics from '@/components/Graphics.vue'
+import GamePersonalizado from '@/components/games/GamePersonalizado.vue'
+import MultiPlayerGames from '@/components/multiPlayer/MultiPlayerGames.vue'
+import Chat from '@/components/chat/Chat.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -98,7 +101,7 @@ const router = createRouter({
     {path: '/admin', name: 'admin', component: NewAdmin},
     {path: '/users', name: 'users', component: Users},
     
-    { path: '/dashboard',
+    { path: '/single-player',
       name: 'dashboard',
       component: Dashboard ,
       meta: { requiresAuth: true },
@@ -121,6 +124,22 @@ const router = createRouter({
       name: 'game6x6',
       component: Game6x6,
       props: true, // Isso permite que o Vue Router passe os parâmetros como props para o componente
+    },
+    {
+      path: '/games/:gameId/:boardId/:rows/:columns',
+      name: 'gamePersonalizado',
+      component: GamePersonalizado,
+      props: true, 
+    },
+    {
+      path: '/multiplayer',
+      name: 'multiplayer',
+      component: MultiPlayerGames, 
+    },
+    {
+      path: '/chat',
+      name: 'chat',
+      component: Chat,
     },
     {
       path: '/historico/',
