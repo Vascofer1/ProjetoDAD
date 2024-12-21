@@ -33,8 +33,13 @@ const cancel = () => {
 }
 
 const login = () => {
-  storeAuth.login(credentials.value)
-  audioStore.playBackgroundMusic()
+  storeAuth.login(credentials.value).then((resultado) => {
+    if (resultado) {
+      audioStore.playBackgroundMusic(); // Only play music if login is successful
+    }
+  });
+
+  
   //router.push({ name: 'home' }); // Redirecionar para a pagina principal
 } 
 </script>
