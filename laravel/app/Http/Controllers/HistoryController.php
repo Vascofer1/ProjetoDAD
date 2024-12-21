@@ -19,7 +19,7 @@ class HistoryController extends Controller
             $games = DB::table('games')
                             ->where('type', "S")
                             ->where('created_user_id', $userId)
-                            ->get();
+                            ->paginate(20);
 
 
             if ($games->isEmpty()) {
@@ -41,7 +41,7 @@ class HistoryController extends Controller
                     ->where('user_id', $userId)
                     ->whereNotNull('winner_user_id')
                     ->select('winner_user_id', 'created_user_id', 'board_id', 'began_at', 'total_time', 'total_turns_winner')
-                    ->get();
+                    ->paginate(20);
 
             if ($games->isEmpty()) {                    
                 return response()->json(['message' => 'No games found'], 404);               
