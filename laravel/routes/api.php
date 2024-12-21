@@ -42,8 +42,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/games/per-type', [GameController::class, 'gamesPerType']);
 
 
-    Route::get('/user/singleplayer', [HistoryController::class, 'singlePlayerHistory'])->can('notAdmin', User::class); 
-    Route::get('/user/multiplayer', [HistoryController::class, 'multiPlayerHistory'])->can('notAdmin', User::class); 
+    Route::get('/historico/singleplayer', [HistoryController::class, 'singlePlayerHistory'])->can('notAdmin', User::class); 
+    Route::get('/historico/multiplayer', [HistoryController::class, 'multiPlayerHistory'])->can('notAdmin', User::class); 
     Route::get('/historico/all', [HistoryController::class, 'allGames'])->can('view', User::class); 
 
     Route::get('/leaderboard/personal', [LeaderBoardController::class, 'personalLeaderboard'])->can('notAdmin', User::class); 
@@ -52,7 +52,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/multiplayergames/{gameId}/{userId}', [MultiPlayerGameController::class, 'update']);
  */
    });
-
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/users', [UserController::class, 'store']);
 Route::get('/leaderboard/global', [LeaderBoardController::class, 'globalLeaderboard']);

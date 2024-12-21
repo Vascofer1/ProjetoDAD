@@ -9,6 +9,13 @@
     <p v-else>No games found.</p>
     </div>
 
+    <!-- Pagination Controls -->
+    <div v-if="pagination">
+        <button @click="fetchGames(pagination.prev_page_url)" :disabled="!pagination.prev_page_url">Previous</button>
+        <span>Page {{ pagination.current_page }} of {{ pagination.last_page }}</span>
+        <button @click="fetchGames(pagination.next_page_url)" :disabled="!pagination.next_page_url">Next</button>
+      </div>
+
 </template>
   
   
@@ -23,15 +30,27 @@ export default {
   },
   setup(){
     //const authStore = useAuthStore();
-    const games = ref([]);
+    const games = ref([]); 
+    const pagination = ref(null);
 
 
-    const fetchGames = async () => {
+    const fetchGames = async (url = "/historico/singleplayer") => {
       try {
-        const response = await axios.get('/user/singleplayer')
-        games.value = response.data;
+        const response = await axios.get(url)
+        games.value = response.data.data;
+
+        pagination.value = {
+          current_page: response.data.current_page,
+          last_page: response.data.last_page,
+          prev_page_url: response.data.prev_page_url,
+          next_page_url: response.data.next_page_url,
+        };
+
       } catch (error) {
         console.error('Error fetching games:', error.message);
+      
+      
+      
       }
     }
 
@@ -41,6 +60,8 @@ export default {
 
     return {
       games,
+      pagination,
+      fetchGames,
     };
     }
     }
