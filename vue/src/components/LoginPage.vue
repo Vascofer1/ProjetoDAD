@@ -14,10 +14,11 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label/index.js' //import { Label } from '@/components/ui/label' ???
 import { useErrorStore } from '@/stores/error'
 import { useAuthStore } from '@/stores/auth'
-import audioStore from '@/stores/audio' 
+import { useAudioStore } from '@/stores/audio'
 
 const storeAuth = useAuthStore()
 const storeError = useErrorStore()
+const audioStore = useAudioStore()
 
 
 const router = useRouter()
@@ -32,8 +33,13 @@ const cancel = () => {
 }
 
 const login = () => {
-  storeAuth.login(credentials.value)
-  audioStore.playBackgroundMusic()
+  storeAuth.login(credentials.value).then((resultado) => {
+    if (resultado) {
+      audioStore.playBackgroundMusic(); // Only play music if login is successful
+    }
+  });
+
+  
   //router.push({ name: 'home' }); // Redirecionar para a pagina principal
 } 
 </script>
