@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useErrorStore } from '@/stores/error'
 import { useRouter } from 'vue-router'
 import { useToast } from '@/components/ui/toast/use-toast'
+import { useAuthStore } from '@/stores/auth'
 
 export const useGameStore = defineStore('game', () => {
     const storeError = useErrorStore()
@@ -88,14 +89,8 @@ export const useGameStore = defineStore('game', () => {
         fetchGamesPerMonth,
     }
 })
-import { ref, computed, inject } from 'vue'
-import { defineStore } from 'pinia'
-import axios from 'axios'
-import { useErrorStore } from '@/stores/error'
-import { useAuthStore } from '@/stores/auth'
-import { useToast } from '@/components/ui/toast/use-toast'
-import router from '@/router'
-import { useRouter } from "vue-router"; 
+
+
 export const useGamesStore = defineStore('games', () => {
     const storeAuth = useAuthStore()
     const storeError = useErrorStore()

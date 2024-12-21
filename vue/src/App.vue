@@ -45,6 +45,10 @@ const handleMessageFromInputDialog = (message) => {
     storeChat.sendPrivateMessageToUser(userDestination, message)
 }
 
+const toggleMute = () => {
+  audioStore.toggleMute();
+}
+
 </script>
 
 <template>
@@ -52,6 +56,9 @@ const handleMessageFromInputDialog = (message) => {
   <GlobalAlertDialog ref="alert-dialog"></GlobalAlertDialog>
   <div class="min-h-screen bg-gradient-to-r from-gray-100 to-blue-50">
     <header class="bg-white shadow-md">
+    </header>
+  </div>
+
   <GlobalInputDialog ref="input-dialog"></GlobalInputDialog>
   <div class="min-h-screen bg-gray-50">
     <header class="bg-white shadow-sm">
